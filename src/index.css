@@ -1,0 +1,15 @@
+.logo {
+    display: inline-block;
+    width: 30px;
+    height: 35px;
+    background-image: url('https://zeppelin.solutions/images/badge_audit.svg');
+    background-size: contain;
+    filter: invert(100%);
+}
+
+@media (max-width: 768px) {
+    .logo {
+        width: 32px;
+        height: 32px;
+  }
+}
