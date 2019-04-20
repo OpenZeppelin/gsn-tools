@@ -8,6 +8,9 @@ import 'decentraland-ui/lib/dark-theme.css'
 import App from './components/App'
 import * as serviceWorker from './serviceWorker'
 
+import JavascriptTimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en'
+JavascriptTimeAgo.locale(en)
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
