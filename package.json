@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "classnames": "^2.2.6",
     "decentraland-ui": "^2.2.2",
     "immutable": "^4.0.0-rc.12",
     "javascript-time-ago": "^2.0.1",

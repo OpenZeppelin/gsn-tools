@@ -1,9 +1,7 @@
 import React from 'react'
-
-import { Container } from 'decentraland-ui'
+import {Container} from 'decentraland-ui'
 
 class Footer extends React.Component {
-
     render = () => {
         return (
             <Container className="dcl footer">

@@ -14,16 +14,16 @@ class Root extends React.Component {
     render = () => {
         return (
             <React.Fragment>
-            <div className="Page-story-container">
-                <Navbar/>
-                <Switch>
-                    <Route exact path={routes.dashboard} component={Dashboard}/>
-                    <Route exact path={routes.clients} component={Clients}/>
-                    <Route exact path={routes.transactions} component={Transactions}/>
-                    <Route component={Blank}/>
-                </Switch>
-                <Footer/>
-            </div>
+                <div className="Page-story-container">
+                    <Navbar/>
+                    <Switch>
+                        <Route exact path={routes.dashboard} component={Dashboard}/>
+                        <Route exact path={routes.clients} component={Clients}/>
+                        <Route exact path={routes.transactions} component={Transactions}/>
+                        <Route component={Blank}/>
+                    </Switch>
+                    <Footer/>
+                </div>
             </React.Fragment>
 
         )
