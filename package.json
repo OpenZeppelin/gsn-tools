@@ -3,18 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^3.9.3",
+    "@material-ui/icons": "^3.0.2",
     "classnames": "^2.2.6",
-    "decentraland-ui": "^2.2.2",
     "immutable": "^4.0.0-rc.12",
     "javascript-time-ago": "^2.0.1",
     "moment": "^2.24.0",
     "path-to-regexp": "^3.0.0",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
-    "react-time-ago": "^5.0.2"
+    "react-time-ago": "^5.0.4",
+    "recharts": "^1.5.0",
+    "typescript": "^3.4.4"
   },
   "scripts": {
     "start": "react-scripts start",

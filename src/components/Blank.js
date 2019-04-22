@@ -1,10 +1,9 @@
-import React from 'react'
-import {Page} from 'decentraland-ui'
+import React, {Fragment} from 'react'
 
 class Blank extends React.Component {
     render = () => {
         return (
-            <Page/>
+            <Fragment/>
         )
     }
 }

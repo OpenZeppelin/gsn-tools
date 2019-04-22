@@ -1,111 +1,48 @@
-import React from 'react'
-import moment from 'moment'
-import ReactTimeAgo from 'react-time-ago'
-import {Container, HeaderMenu, Header, Table, Page, Mana} from 'decentraland-ui'
+import React, {Fragment} from 'react'
+import PropTypes from 'prop-types'
+import {withStyles} from '@material-ui/core/styles/index'
+import Typography from '@material-ui/core/Typography/index'
+import TransactionsTable from './TransactionsTable'
 
-import {getTransactions} from '../apis/transactions'
+const styles = theme => ({
+    appBarSpacer: theme.mixins.toolbar,
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing.unit * 3,
+        height: '100vh',
+        overflow: 'auto',
+    },
+    tableContainer: {
+        height: 320,
+    },
+})
 
 
 class Transactions extends React.Component {
     state = {
-        txs: null
-    }
-
-    componentDidMount = () => {
-        getTransactions().then(txs => this.setState({txs: txs}))
-    }
-
-    renderTransactions = () => {
-        const {txs} = this.state
-
-        return txs.map((tx, index) => {
-            return (
-                <Table.Row key={index}>
-                    <Table.Cell>
-                        <span className="hash-tag text-truncate">
-                            <a
-                                className="ui basic button"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href={`https://etherscan.io/block/${tx.get('blockHash')}`}>
-                                {tx.get('blockHash')}
-                            </a>
-                        </span>
-                    </Table.Cell>
-                    <Table.Cell>
-                        <ReactTimeAgo
-                            className="light-grey-ic"
-                            date={moment.utc(new Date(tx.get('timeStamp') * 1000)).toDate()}/>
-                    </Table.Cell>
-                    <Table.Cell>{tx.get('blockNumber')}</Table.Cell>
-                    <Table.Cell>
-                        <Mana size="small">
-                            {tx.get('gasPrice') / 21000}
-                        </Mana>
-                    </Table.Cell>
-                    <Table.Cell>
-                        <span className="hash-tag text-truncate">
-                            <a
-                                className="ui basic button"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href={`https://etherscan.io/address/${tx.get('from')}`}>
-                                {tx.get('from')}
-                            </a>
-                        </span>
-                    </Table.Cell>
-                    <Table.Cell>
-                        <span className="hash-tag text-truncate">
-                            <a
-                                className="ui basic button"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href={`https://etherscan.io/address/${tx.get('to')}`}>
-                                {tx.get('to')}
-                            </a>
-                        </span>
-                    </Table.Cell>
-                    <Table.Cell>{tx.get('gas') / 21000}</Table.Cell>
-                </Table.Row>
-            )
-        })
+        open: false,
     }
 
     render = () => {
-        const {txs} = this.state
-
-        if (!txs) {
-            return null
-        }
+        const {classes} = this.props
 
         return (
-            <Page>
-                <Container>
-                    <HeaderMenu>
-                        <HeaderMenu.Left>
-                            <Header size="large">Transactions</Header>
-                        </HeaderMenu.Left>
-                    </HeaderMenu>
-                    <Table basic="very">
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell>TxHash</Table.HeaderCell>
-                                <Table.HeaderCell>Age</Table.HeaderCell>
-                                <Table.HeaderCell>Block</Table.HeaderCell>
-                                <Table.HeaderCell>Value</Table.HeaderCell>
-                                <Table.HeaderCell>From</Table.HeaderCell>
-                                <Table.HeaderCell>To</Table.HeaderCell>
-                                <Table.HeaderCell>TxFee</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {this.renderTransactions()}
-                        </Table.Body>
-                    </Table>
-                </Container>
-            </Page>
+            <Fragment>
+                <div className={classes.appBarSpacer}/>
+                <Typography variant="h4" gutterBottom component="h2">
+                    Transactions
+                </Typography>
+                <div className={classes.tableContainer}>
+                    <TransactionsTable/>
+                </div>
+            </Fragment>
         )
     }
 }
 
-export default Transactions
+
+Transactions.propTypes = {
+    classes: PropTypes.object.isRequired,
+}
+
+export default withStyles(styles)(Transactions)

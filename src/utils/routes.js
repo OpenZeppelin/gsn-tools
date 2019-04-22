@@ -14,7 +14,6 @@ const buildUrl = (template, params) => {
 }
 
 export {
+    routes,
     buildUrl,
 }
-
-export default routes

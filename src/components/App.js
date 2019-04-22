@@ -3,7 +3,7 @@ import {Route} from 'react-router'
 import {BrowserRouter} from 'react-router-dom'
 
 import Root from './Root'
-import routes from '../utils/routes'
+import {routes} from '../utils/routes'
 
 
 class App extends React.Component {

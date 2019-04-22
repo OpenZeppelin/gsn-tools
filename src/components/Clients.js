@@ -1,15 +1,20 @@
-import React from 'react'
-import {Page, Header} from 'decentraland-ui'
+import React, {Fragment} from 'react'
+
 
 class Clients extends React.Component {
-    render = () => {
+    state = {
+        open: false,
+    }
+
+    render() {
         return (
-            <Page>
-                <Header>Clients</Header>
-                <p>This is where I list all the relay's current clients</p>
-            </Page>
+            <Fragment/>
         )
     }
+}
+
+
+Clients.propTypes = {
 }
 
 export default Clients
