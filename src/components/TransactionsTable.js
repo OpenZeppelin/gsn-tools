@@ -31,11 +31,11 @@ const styles = theme => ({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
-        cursor: 'pointer',
     },
     link: {
         color: '#3498db',
         textDecoration: 'none',
+        cursor: 'pointer',
     }
 })
 
@@ -130,7 +130,7 @@ class TransactionsTable extends React.Component {
                                                     className={classes.link}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    href={`https://etherscan.io/block/${tx.get('blockHash')}`}>
+                                                    href={`https://etherscan.io/tx/${tx.get('blockHash')}`}>
                                                     {tx.get('blockHash')}
                                                 </a>
                                             </span>
@@ -139,8 +139,18 @@ class TransactionsTable extends React.Component {
                                             <ReactTimeAgo
                                                 date={moment.utc(new Date(tx.get('timeStamp') * 1000)).toDate()}/>
                                         </TableCell>
-                                        <TableCell>{tx.get('blockNumber')}</TableCell>
-                                        <TableCell>{tx.get('gasPrice') / 21000}</TableCell>
+                                        <TableCell>
+                                            <span className={classes.hash}>
+                                                <a
+                                                    className={classes.link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    href={`https://etherscan.io/block/${tx.get('blockNumber')}`}>
+                                                    {tx.get('blockNumber')}
+                                                </a>
+                                            </span>
+                                        </TableCell>
+                                        <TableCell>{web3.utils.fromWei(tx.get('gasPrice'), 'ether')}</TableCell>
                                         <TableCell>
                                             <span className={classes.hash}>
                                                 <a
@@ -163,7 +173,7 @@ class TransactionsTable extends React.Component {
                                                 </a>
                                             </span>
                                         </TableCell>
-                                        <TableCell>{tx.get('gas') / 21000}</TableCell>
+                                        <TableCell>{web3.utils.fromWei(tx.get('gas'), 'ether')}</TableCell>
                                     </TableRow>
                                 ))}
                         </TableBody>
