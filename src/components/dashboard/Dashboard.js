@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
+import classNames from 'classnames'
 import {withStyles} from '@material-ui/core/styles/index'
 import Typography from '@material-ui/core/Typography/index'
 import Card from '@material-ui/core/Card/index'
@@ -12,8 +13,22 @@ import LastTransactionsTable from '../transactions/LastTransactionsTable'
 import {buildUrl, routes} from '../../utils/routes'
 
 const styles = ({
+    zero: {
+        paddingTop: 0,
+        paddingBottom: 0,
+        '&:last-child': {
+            paddingTop: 12,
+            paddingBottom: 12,
+        }
+    },
+    strong: {
+        fontWeight: 550,
+        fontSize: 18,
+    },
     linkTitle: {
-        marginBottom: 5,
+        paddingTop: 16,
+        paddingBottom: 16,
+        paddingLeft: 16,
         textDecoration: 'none',
         cursor: 'pointer',
     },
@@ -30,15 +45,36 @@ const styles = ({
 
 
 class Dashboard extends React.Component {
+    state = {
+        dappContract: '0x066719a77148f332B55870EDb8058b71888b10FD',
+    }
+
     render() {
-        const {classes} = this.props
+        const {classes, className, ...other} = this.props
+        const {dappContract} = this.state
         return (
             <Fragment>
-                <Grid container spacing={24}>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Card className={classes.card}>
+                            <CardContent className={classNames(classes.zero, className)} {...other}>
+                                <Typography component="span">
+                                    <Grid container spacing={16}>
+                                        <Grid item>
+                                            <label className={classes.strong}>Dapp Contract:</label>
+                                        </Grid>
+                                        <Grid item>
+                                            {dappContract}
+                                        </Grid>
+                                    </Grid>
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Grid>
                     <Grid item xs={12}>
                         <Typography
                             variant="h5"
-                            className={classes.linkTitle}
+                            className={classNames(classes.linkTitle, classes.strong)}
                             component={props => <Link to={buildUrl(routes.clients)} {...props}/>}>
                             Clients per day
                         </Typography>
@@ -53,7 +89,7 @@ class Dashboard extends React.Component {
                     <Grid item xs={12}>
                         <Typography
                             variant="h5"
-                            className={classes.linkTitle}
+                            className={classNames(classes.linkTitle, classes.strong)}
                             component={props => <Link to={buildUrl(routes.transactions)} {...props}/>}>
                             Last Transactions
                         </Typography>
@@ -69,6 +105,7 @@ class Dashboard extends React.Component {
 
 Dashboard.propTypes = {
     classes: PropTypes.object.isRequired,
+    className: PropTypes.string,
 }
 
 export default withStyles(styles)(Dashboard)

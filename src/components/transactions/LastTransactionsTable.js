@@ -45,7 +45,10 @@ const styles = theme => ({
 
 const rows = [
     {id: 'blockHash', disablePadding: false, label: 'TxHash'},
+    {id: 'block', disablePadding: false, label: 'Block'},
     {id: 'timeStamp', disablePadding: false, label: 'Age'},
+    {id: 'from', disablePadding: false, label: 'From'},
+    {id: 'to', disablePadding: false, label: 'To'},
     {id: 'gasPrice', disablePadding: false, label: 'Value'},
     {id: 'gas', disablePadding: false, label: '[TxFee]'},
 ]
@@ -108,8 +111,41 @@ class LastTransactionsTable extends React.Component {
                                                 </span>
                                             </TableCell>
                                             <TableCell>
+                                                <span className={classes.hash}>
+                                                    <a
+                                                        className={classes.link}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        href={`https://etherscan.io/block/${tx.get('blockNumber')}`}>
+                                                        {tx.get('blockNumber')}
+                                                    </a>
+                                                </span>
+                                            </TableCell>
+                                            <TableCell>
                                                 <ReactTimeAgo
                                                     date={moment.utc(new Date(tx.get('timeStamp') * 1000)).toDate()}/>
+                                            </TableCell>
+                                            <TableCell>
+                                                <span className={classes.hash}>
+                                                    <a
+                                                        className={classes.link}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        href={`https://etherscan.io/address/${tx.get('from')}`}>
+                                                        {tx.get('from')}
+                                                    </a>
+                                                </span>
+                                            </TableCell>
+                                            <TableCell>
+                                                <span className={classes.hash}>
+                                                    <a
+                                                        className={classes.link}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        href={`https://etherscan.io/address/${tx.get('to')}`}>
+                                                        {tx.get('to')}
+                                                    </a>
+                                                </span>
                                             </TableCell>
                                             <TableCell>{web3.utils.fromWei(tx.get('gasPrice'), 'ether')}</TableCell>
                                             <TableCell>{web3.utils.fromWei(tx.get('gas'), 'ether')}</TableCell>
