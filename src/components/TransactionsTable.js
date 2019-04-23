@@ -14,11 +14,7 @@ import TablePagination from '@material-ui/core/TablePagination'
 import TransactionsTableHead from './TransactionsTableHead'
 import {getTransactions} from '../apis/transactions'
 import Collapse from '@material-ui/core/Collapse'
-import Card from '@material-ui/core/Card'
-import CardActionArea from '@material-ui/core/CardActionArea'
-import CardContent from '@material-ui/core/CardContent'
-import Typography from '@material-ui/core/Typography'
-import Grid from '@material-ui/core/Grid'
+import TransactionsTableCollapse from './TransactionsTableCollapse'
 
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
 
@@ -31,8 +27,7 @@ const styles = theme => ({
         width: '100%',
         marginTop: theme.spacing.unit * 3,
     },
-    table: {
-    },
+    table: {},
     tableWrapper: {
         overflowX: 'auto',
     },
@@ -48,12 +43,6 @@ const styles = theme => ({
         color: '#3498db',
         textDecoration: 'none',
         cursor: 'pointer',
-    },
-    grid: {
-        flexGrow: 1,
-    },
-    card: {
-        border: 0,
     },
     paper: {
         padding: theme.spacing.unit * 2,
@@ -182,52 +171,7 @@ class TransactionsTable extends React.Component {
                                                     </TableCell>
                                                 </TableRow>
                                             )}>
-                                            <Card>
-                                                <CardActionArea>
-                                                    <CardContent>
-                                                        <div className={classes.grid}>
-                                                            <Grid container spacing={24}>
-                                                                <Grid item xs={12}>
-                                                                    <Typography component="span">
-                                                                        <label>Block:</label>
-                                                                        <a
-                                                                            className={classes.link}
-                                                                            target="_blank"
-                                                                            rel="noopener noreferrer"
-                                                                            href={`https://etherscan.io/block/${tx.get('blockNumber')}`}>
-                                                                            {tx.get('blockNumber')}
-                                                                        </a>
-                                                                    </Typography>
-                                                                </Grid>
-                                                                <Grid item xs={12}>
-                                                                    <Typography component="span">
-                                                                        <label>From:</label>
-                                                                        <a
-                                                                            className={classes.link}
-                                                                            target="_blank"
-                                                                            rel="noopener noreferrer"
-                                                                            href={`https://etherscan.io/address/${tx.get('from')}`}>
-                                                                            {tx.get('from')}
-                                                                        </a>
-                                                                    </Typography>
-                                                                </Grid>
-                                                                <Grid item xs={12}>
-                                                                    <Typography component="span">
-                                                                        <label>To:</label>
-                                                                        <a
-                                                                            className={classes.link}
-                                                                            target="_blank"
-                                                                            rel="noopener noreferrer"
-                                                                            href={`https://etherscan.io/address/${tx.get('to')}`}>
-                                                                            {tx.get('to')}
-                                                                        </a>
-                                                                    </Typography>
-                                                                </Grid>
-                                                            </Grid>
-                                                        </div>
-                                                    </CardContent>
-                                                </CardActionArea>
-                                            </Card>
+                                            <TransactionsTableCollapse tx={tx}/>
                                         </Collapse>
                                     </Fragment>
                                 ))}
