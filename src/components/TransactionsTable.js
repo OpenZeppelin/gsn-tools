@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import ReactTimeAgo from 'react-time-ago'
+import Web3 from 'web3'
 import {withStyles} from '@material-ui/core/styles/index'
 import Table from '@material-ui/core/Table/index'
 import TableBody from '@material-ui/core/TableBody/index'
@@ -12,6 +13,12 @@ import TablePagination from '@material-ui/core/TablePagination'
 
 import TransactionsTableHead from './TransactionsTableHead'
 import {getTransactions} from '../apis/transactions'
+
+const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
+
+//Account "0x00a329c0648769A73afAc7F9381E08FB43dBEA72" web3.eth.getAccounts(console.log)
+//Balance "1606938044258990275541962092341162602522202993782792835301376" web3.eth.getBalance(account)
+//BlockNumber 0 web3.eth.getBlockNumber(console.log)
 
 const styles = theme => ({
     root: {
