@@ -10,11 +10,12 @@ import TableCell from '@material-ui/core/TableCell/index'
 import TableRow from '@material-ui/core/TableRow/index'
 import Paper from '@material-ui/core/Paper/index'
 import TablePagination from '@material-ui/core/TablePagination'
+import Collapse from '@material-ui/core/Collapse'
 
 import TransactionsTableHead from './TransactionsTableHead'
 import {getTransactions} from '../apis/transactions'
-import Collapse from '@material-ui/core/Collapse'
 import TransactionsTableCollapse from './TransactionsTableCollapse'
+import {getSorting, stableSort} from '../utils/sorting'
 
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
 
@@ -50,35 +51,6 @@ const styles = theme => ({
         color: theme.palette.text.secondary,
     },
 })
-
-function stableSort(array, cmp) {
-    const stabilizedThis = array.map((el, index) => [el, index])
-    stabilizedThis.sort((a, b) => {
-        const order = cmp(a[0], b[0])
-        if (order !== 0) {
-            return order
-        }
-        return a[1] - b[1]
-    })
-    return stabilizedThis.map(el => el[0])
-}
-
-function getSorting(order, orderBy) {
-    if (order === 'desc') {
-        return (a, b) => desc(a, b, orderBy)
-    }
-    return (a, b) => -desc(a, b, orderBy)
-}
-
-function desc(a, b, orderBy) {
-    if (b.get(orderBy) < a.get(orderBy)) {
-        return -1
-    }
-    if (b.get(orderBy) > a.get(orderBy)) {
-        return 1
-    }
-    return 0
-}
 
 
 class TransactionsTable extends React.Component {
@@ -131,7 +103,7 @@ class TransactionsTable extends React.Component {
         return (
             <Paper className={classes.root}>
                 <div className={classes.tableWrapper}>
-                    <Table className={classes.table}>
+                    <Table>
                         <TransactionsTableHead
                             order={order}
                             orderBy={orderBy}
@@ -141,7 +113,7 @@ class TransactionsTable extends React.Component {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((tx, index) => (
                                     <Fragment key={index}>
-                                        <TableRow onClick={() => this.handleRowClick(index)}>
+                                        <TableRow hover={true} onClick={() => this.handleRowClick(index)}>
                                             <TableCell>
                                                 <span className={classes.hash}>
                                                     <a
@@ -161,13 +133,15 @@ class TransactionsTable extends React.Component {
                                             <TableCell>{web3.utils.fromWei(tx.get('gas'), 'ether')}</TableCell>
                                         </TableRow>
                                         <Collapse
+                                            mountOnEnter
                                             unmountOnExit
                                             in={expanded === index}
-                                            timeout="auto"
                                             component={(props) => (
                                                 <TableRow>
                                                     <TableCell colSpan={4}>
-                                                        {props.children}
+                                                        <Paper elevation={1} className={classes.paper}>
+                                                            {props.children}
+                                                        </Paper>
                                                     </TableCell>
                                                 </TableRow>
                                             )}>

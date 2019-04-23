@@ -21,16 +21,15 @@ const styles = theme => ({
     },
 })
 
-
-class TransactionsTableCollapse extends React.Component {
+class TransactionsTableCollapse extends React.PureComponent {
     render = () => {
         const {classes, tx} = this.props
         return (
-            <Grid container spacing={16}>
-                <Grid item xs={12} borderBottom={1}>
+            <Grid container spacing={24}>
+                <Grid item xs={12}>
                     <Typography component="span">
-                        <Grid container>
-                            <Grid item xs={1}>
+                        <Grid container spacing={16}>
+                            <Grid item>
                                 <label>Block</label>
                             </Grid>
                             <Grid item>
@@ -48,8 +47,8 @@ class TransactionsTableCollapse extends React.Component {
                 <Divider/>
                 <Grid item xs={12}>
                     <Typography component="span">
-                        <Grid container>
-                            <Grid item xs={1}>
+                        <Grid container spacing={16}>
+                            <Grid item>
                                 <label>From</label>
                             </Grid>
                             <Grid item>
@@ -66,8 +65,8 @@ class TransactionsTableCollapse extends React.Component {
                 </Grid>
                 <Grid item xs={12}>
                     <Typography component="span">
-                        <Grid container>
-                            <Grid item xs={1}>
+                        <Grid container spacing={16}>
+                            <Grid item>
                                 <label>To</label>
                             </Grid>
                             <Grid item>
@@ -83,7 +82,6 @@ class TransactionsTableCollapse extends React.Component {
                     </Typography>
                 </Grid>
             </Grid>
-
         )
     }
 }
