@@ -9,16 +9,26 @@ import TableBody from '@material-ui/core/TableBody/index'
 import TableCell from '@material-ui/core/TableCell/index'
 import TableRow from '@material-ui/core/TableRow/index'
 import Paper from '@material-ui/core/Paper/index'
-import {getTransactions} from '../apis/transactions'
-import {getSorting, stableSort} from '../utils/sorting'
-import TableHead from '@material-ui/core/TableHead'
+import TablePagination from '@material-ui/core/TablePagination/index'
+import Collapse from '@material-ui/core/Collapse/index'
+
+import TransactionsTableHead from './TransactionsTableHead'
+import {getTransactions} from '../../apis/transactions'
+import TransactionsTableCollapse from './TransactionsTableCollapse'
+import {getSorting, stableSort} from '../../utils/sorting'
 
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
+
+// Account "0x00a329c0648769A73afAc7F9381E08FB43dBEA72" web3.eth.getAccounts(console.log)
+// Balance "1606938044258990275541962092341162602522202993782792835301376" web3.eth.getBalance(account)
+// BlockNumber 0 web3.eth.getBlockNumber(console.log)
 
 const styles = theme => ({
     root: {
         width: '100%',
+        marginTop: theme.spacing.unit * 3,
     },
+    table: {},
     tableWrapper: {
         overflowX: 'auto',
     },
@@ -42,21 +52,15 @@ const styles = theme => ({
     },
 })
 
-const rows = [
-    {id: 'blockHash', disablePadding: false, label: 'TxHash'},
-    {id: 'timeStamp', disablePadding: false, label: 'Age'},
-    {id: 'gasPrice', disablePadding: false, label: 'Value'},
-    {id: 'gas', disablePadding: false, label: '[TxFee]'},
-]
 
-
-class LastTransactionsTable extends React.Component {
+class TransactionsTable extends React.Component {
     state = {
         txs: null,
         page: 0,
-        rowsPerPage: 5,
+        rowsPerPage: 10,
         order: 'desc',
         orderBy: 'timeStamp',
+        expanded: null,
     }
 
     componentDidMount = () => {
@@ -65,9 +69,32 @@ class LastTransactionsTable extends React.Component {
         )
     }
 
+    handleChangePage = (event, page) => {
+        this.setState({expanded: null},
+            () => this.setState({page}))
+    }
+
+    handleRequestSort = (event, property) => {
+        const orderBy = property
+        let order = 'desc'
+
+        if (this.state.orderBy === property && this.state.order === 'desc') {
+            order = 'asc'
+        }
+
+        this.setState({expanded: null},
+            () => this.setState({order, orderBy}))
+    }
+
+    handleRowClick = (index) => {
+        this.setState((prevState) => ({
+            expanded: prevState.expanded === index ? null : index
+        }))
+    }
+
     render = () => {
         const {classes} = this.props
-        const {txs, order, orderBy, rowsPerPage, page} = this.state
+        const {txs, order, orderBy, rowsPerPage, page, expanded} = this.state
 
         if (!txs) {
             return null
@@ -77,24 +104,16 @@ class LastTransactionsTable extends React.Component {
             <Paper className={classes.root}>
                 <div className={classes.tableWrapper}>
                     <Table>
-                        <TableHead>
-                            <TableRow>
-                                {rows.map((row, index) => (
-                                    <TableCell
-                                        key={index}
-                                        padding={row.disablePadding ? 'none' : 'default'}
-                                        sortDirection={orderBy === row.id ? order : false}>
-                                        {row.label}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
+                        <TransactionsTableHead
+                            order={order}
+                            orderBy={orderBy}
+                            onRequestSort={this.handleRequestSort}/>
                         <TableBody>
                             {stableSort(txs.toArray(), getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((tx, index) => (
                                     <Fragment key={index}>
-                                        <TableRow hover={true}>
+                                        <TableRow hover={true} onClick={() => this.handleRowClick(index)}>
                                             <TableCell>
                                                 <span className={classes.hash}>
                                                     <a
@@ -113,18 +132,47 @@ class LastTransactionsTable extends React.Component {
                                             <TableCell>{web3.utils.fromWei(tx.get('gasPrice'), 'ether')}</TableCell>
                                             <TableCell>{web3.utils.fromWei(tx.get('gas'), 'ether')}</TableCell>
                                         </TableRow>
+                                        <Collapse
+                                            mountOnEnter
+                                            unmountOnExit
+                                            in={expanded === index}
+                                            component={(props) => (
+                                                <TableRow>
+                                                    <TableCell colSpan={4}>
+                                                        <Paper elevation={1} className={classes.paper}>
+                                                            {props.children}
+                                                        </Paper>
+                                                    </TableCell>
+                                                </TableRow>
+                                            )}>
+                                            <TransactionsTableCollapse tx={tx}/>
+                                        </Collapse>
                                     </Fragment>
                                 ))}
                         </TableBody>
                     </Table>
                 </div>
+                <TablePagination
+                    rowsPerPageOptions={[]}
+                    component="div"
+                    count={txs.size}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    backIconButtonProps={{
+                        'aria-label': 'Previous Page',
+                    }}
+                    nextIconButtonProps={{
+                        'aria-label': 'Next Page',
+                    }}
+                    onChangePage={this.handleChangePage}/>
             </Paper>
         )
     }
 }
 
-LastTransactionsTable.propTypes = {
+
+TransactionsTable.propTypes = {
     classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(LastTransactionsTable)
+export default withStyles(styles)(TransactionsTable)

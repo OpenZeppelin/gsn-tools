@@ -6,11 +6,11 @@ import CssBaseline from '@material-ui/core/CssBaseline/index'
 
 import DrawerMUI from './DrawerMUI'
 import AppBarMUI from './AppBarMUI'
-import {routes} from '../utils/routes'
-import Blank from './Blank'
-import Clients from './Clients'
-import Transactions from './Transactions'
-import Dashboard from './Dashboard'
+import {routes} from '../../utils/routes'
+import Blank from '../Blank'
+import Clients from '../clients/Clients'
+import Transactions from '../transactions/Transactions'
+import Dashboard from '../dashboard/Dashboard'
 
 const styles = theme => ({
     appBarSpacer: theme.mixins.toolbar,

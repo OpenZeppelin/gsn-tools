@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import TableSortLabel from '@material-ui/core/TableSortLabel'
-import Tooltip from '@material-ui/core/Tooltip'
+import TableCell from '@material-ui/core/TableCell/index'
+import TableHead from '@material-ui/core/TableHead/index'
+import TableRow from '@material-ui/core/TableRow/index'
+import TableSortLabel from '@material-ui/core/TableSortLabel/index'
+import Tooltip from '@material-ui/core/Tooltip/index'
 
 const rows = [
     {id: 'blockHash', disablePadding: false, label: 'TxHash'},

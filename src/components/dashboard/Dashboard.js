@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
 import {withStyles} from '@material-ui/core/styles/index'
 import Typography from '@material-ui/core/Typography/index'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import Grid from '@material-ui/core/Grid'
+import Card from '@material-ui/core/Card/index'
+import CardContent from '@material-ui/core/CardContent/index'
+import Grid from '@material-ui/core/Grid/index'
 
-import ClientsPerDay from './ClientsPerDay'
-import LastTransactionsTable from './LastTransactionsTable'
-import {buildUrl, routes} from '../utils/routes'
+import ClientsPerDay from '../clients/ClientsPerDay'
+import LastTransactionsTable from '../transactions/LastTransactionsTable'
+import {buildUrl, routes} from '../../utils/routes'
 
 const styles = ({
     linkTitle: {

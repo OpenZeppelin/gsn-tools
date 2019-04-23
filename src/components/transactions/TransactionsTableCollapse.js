@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import immutable from 'immutable'
 import {withStyles} from '@material-ui/core/styles/index'
-import Typography from '@material-ui/core/Typography'
-import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography/index'
+import Grid from '@material-ui/core/Grid/index'
 
 const styles = theme => ({
     root: {
@@ -19,6 +19,7 @@ const styles = theme => ({
         flexGrow: 1,
     },
 })
+
 
 class TransactionsTableCollapse extends React.PureComponent {
     render = () => {
