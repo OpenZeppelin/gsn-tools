@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import ReactTimeAgo from 'react-time-ago'
@@ -13,12 +13,18 @@ import TablePagination from '@material-ui/core/TablePagination'
 
 import TransactionsTableHead from './TransactionsTableHead'
 import {getTransactions} from '../apis/transactions'
+import Collapse from '@material-ui/core/Collapse'
+import Card from '@material-ui/core/Card'
+import CardActionArea from '@material-ui/core/CardActionArea'
+import CardContent from '@material-ui/core/CardContent'
+import Typography from '@material-ui/core/Typography'
+import Grid from '@material-ui/core/Grid'
 
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
 
-//Account "0x00a329c0648769A73afAc7F9381E08FB43dBEA72" web3.eth.getAccounts(console.log)
-//Balance "1606938044258990275541962092341162602522202993782792835301376" web3.eth.getBalance(account)
-//BlockNumber 0 web3.eth.getBlockNumber(console.log)
+// Account "0x00a329c0648769A73afAc7F9381E08FB43dBEA72" web3.eth.getAccounts(console.log)
+// Balance "1606938044258990275541962092341162602522202993782792835301376" web3.eth.getBalance(account)
+// BlockNumber 0 web3.eth.getBlockNumber(console.log)
 
 const styles = theme => ({
     root: {
@@ -26,7 +32,6 @@ const styles = theme => ({
         marginTop: theme.spacing.unit * 3,
     },
     table: {
-        minWidth: 1020,
     },
     tableWrapper: {
         overflowX: 'auto',
@@ -43,7 +48,18 @@ const styles = theme => ({
         color: '#3498db',
         textDecoration: 'none',
         cursor: 'pointer',
-    }
+    },
+    grid: {
+        flexGrow: 1,
+    },
+    card: {
+        border: 0,
+    },
+    paper: {
+        padding: theme.spacing.unit * 2,
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+    },
 })
 
 function stableSort(array, cmp) {
@@ -83,6 +99,7 @@ class TransactionsTable extends React.Component {
         rowsPerPage: 10,
         order: 'desc',
         orderBy: 'timeStamp',
+        expanded: null,
     }
 
     componentDidMount = () => {
@@ -92,11 +109,8 @@ class TransactionsTable extends React.Component {
     }
 
     handleChangePage = (event, page) => {
-        this.setState({page})
-    }
-
-    handleChangeRowsPerPage = event => {
-        this.setState({rowsPerPage: event.target.value})
+        this.setState({expanded: null},
+            () => this.setState({page}))
     }
 
     handleRequestSort = (event, property) => {
@@ -107,12 +121,19 @@ class TransactionsTable extends React.Component {
             order = 'asc'
         }
 
-        this.setState({order, orderBy})
+        this.setState({expanded: null},
+            () => this.setState({order, orderBy}))
+    }
+
+    handleRowClick = (index) => {
+        this.setState((prevState) => ({
+            expanded: prevState.expanded === index ? null : index
+        }))
     }
 
     render = () => {
         const {classes} = this.props
-        const {txs, order, orderBy, rowsPerPage, page} = this.state
+        const {txs, order, orderBy, rowsPerPage, page, expanded} = this.state
 
         if (!txs) {
             return null
@@ -130,58 +151,85 @@ class TransactionsTable extends React.Component {
                             {stableSort(txs.toArray(), getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((tx, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell>
-                                            <span className={classes.hash}>
-                                                <a
-                                                    className={classes.link}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    href={`https://etherscan.io/tx/${tx.get('blockHash')}`}>
-                                                    {tx.get('blockHash')}
-                                                </a>
-                                            </span>
-                                        </TableCell>
-                                        <TableCell>
-                                            <ReactTimeAgo
-                                                date={moment.utc(new Date(tx.get('timeStamp') * 1000)).toDate()}/>
-                                        </TableCell>
-                                        <TableCell>
-                                            <span className={classes.hash}>
-                                                <a
-                                                    className={classes.link}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    href={`https://etherscan.io/block/${tx.get('blockNumber')}`}>
-                                                    {tx.get('blockNumber')}
-                                                </a>
-                                            </span>
-                                        </TableCell>
-                                        <TableCell>{web3.utils.fromWei(tx.get('gasPrice'), 'ether')}</TableCell>
-                                        <TableCell>
-                                            <span className={classes.hash}>
-                                                <a
-                                                    className={classes.link}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    href={`https://etherscan.io/address/${tx.get('from')}`}>
-                                                    {tx.get('from')}
-                                                </a>
-                                            </span>
-                                        </TableCell>
-                                        <TableCell>
-                                            <span className={classes.hash}>
-                                                <a
-                                                    className={classes.link}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    href={`https://etherscan.io/address/${tx.get('to')}`}>
-                                                    {tx.get('to')}
-                                                </a>
-                                            </span>
-                                        </TableCell>
-                                        <TableCell>{web3.utils.fromWei(tx.get('gas'), 'ether')}</TableCell>
-                                    </TableRow>
+                                    <Fragment key={index}>
+                                        <TableRow onClick={() => this.handleRowClick(index)}>
+                                            <TableCell>
+                                                <span className={classes.hash}>
+                                                    <a
+                                                        className={classes.link}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        href={`https://etherscan.io/tx/${tx.get('blockHash')}`}>
+                                                        {tx.get('blockHash')}
+                                                    </a>
+                                                </span>
+                                            </TableCell>
+                                            <TableCell>
+                                                <ReactTimeAgo
+                                                    date={moment.utc(new Date(tx.get('timeStamp') * 1000)).toDate()}/>
+                                            </TableCell>
+                                            <TableCell>{web3.utils.fromWei(tx.get('gasPrice'), 'ether')}</TableCell>
+                                            <TableCell>{web3.utils.fromWei(tx.get('gas'), 'ether')}</TableCell>
+                                        </TableRow>
+                                        <Collapse
+                                            unmountOnExit
+                                            in={expanded === index}
+                                            timeout="auto"
+                                            component={(props) => (
+                                                <TableRow>
+                                                    <TableCell colSpan={4}>
+                                                        {props.children}
+                                                    </TableCell>
+                                                </TableRow>
+                                            )}>
+                                            <Card>
+                                                <CardActionArea>
+                                                    <CardContent>
+                                                        <div className={classes.grid}>
+                                                            <Grid container spacing={24}>
+                                                                <Grid item xs={12}>
+                                                                    <Typography component="span">
+                                                                        <label>Block:</label>
+                                                                        <a
+                                                                            className={classes.link}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            href={`https://etherscan.io/block/${tx.get('blockNumber')}`}>
+                                                                            {tx.get('blockNumber')}
+                                                                        </a>
+                                                                    </Typography>
+                                                                </Grid>
+                                                                <Grid item xs={12}>
+                                                                    <Typography component="span">
+                                                                        <label>From:</label>
+                                                                        <a
+                                                                            className={classes.link}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            href={`https://etherscan.io/address/${tx.get('from')}`}>
+                                                                            {tx.get('from')}
+                                                                        </a>
+                                                                    </Typography>
+                                                                </Grid>
+                                                                <Grid item xs={12}>
+                                                                    <Typography component="span">
+                                                                        <label>To:</label>
+                                                                        <a
+                                                                            className={classes.link}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            href={`https://etherscan.io/address/${tx.get('to')}`}>
+                                                                            {tx.get('to')}
+                                                                        </a>
+                                                                    </Typography>
+                                                                </Grid>
+                                                            </Grid>
+                                                        </div>
+                                                    </CardContent>
+                                                </CardActionArea>
+                                            </Card>
+                                        </Collapse>
+                                    </Fragment>
                                 ))}
                         </TableBody>
                     </Table>
@@ -198,8 +246,7 @@ class TransactionsTable extends React.Component {
                     nextIconButtonProps={{
                         'aria-label': 'Next Page',
                     }}
-                    onChangePage={this.handleChangePage}
-                    onChangeRowsPerPage={this.handleChangeRowsPerPage}/>
+                    onChangePage={this.handleChangePage}/>
             </Paper>
         )
     }

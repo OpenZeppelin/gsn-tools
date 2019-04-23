@@ -9,10 +9,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 const rows = [
     {id: 'blockHash', disablePadding: false, label: 'TxHash'},
     {id: 'timeStamp', disablePadding: false, label: 'Age'},
-    {id: 'blockNumber', disablePadding: false, label: 'Block'},
     {id: 'gasPrice', disablePadding: false, label: 'Value'},
-    {id: 'from', disablePadding: false, label: 'From'},
-    {id: 'to', disablePadding: false, label: 'To'},
     {id: 'gas', disablePadding: false, label: '[TxFee]'},
 ]
 
