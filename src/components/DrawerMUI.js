@@ -11,6 +11,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import {DrawerItems} from './DrawerItems'
 
 const drawerWidth = 240
+
 const styles = theme => ({
     toolbarIcon: {
         display: 'flex',
@@ -64,7 +65,6 @@ class DrawerMUI extends React.Component {
         )
     }
 }
-
 
 DrawerMUI.propTypes = {
     classes: PropTypes.object.isRequired,

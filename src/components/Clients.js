@@ -1,20 +1,17 @@
-import React, {Fragment} from 'react'
+import React from 'react'
+import Typography from '@material-ui/core/Typography'
 
 
 class Clients extends React.Component {
-    state = {
-        open: false,
-    }
-
     render() {
         return (
-            <Fragment/>
+            <Typography variant="h4" gutterBottom component="h2">
+                Clients
+            </Typography>
         )
     }
 }
 
-
-Clients.propTypes = {
-}
+Clients.propTypes = {}
 
 export default Clients

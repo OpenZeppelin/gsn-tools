@@ -13,6 +13,7 @@ import Transactions from './Transactions'
 import Dashboard from './Dashboard'
 
 const styles = theme => ({
+    appBarSpacer: theme.mixins.toolbar,
     root: {
         display: 'flex',
     },
@@ -48,6 +49,7 @@ class Layout extends React.Component {
                 <AppBarMUI open={open} handleDrawerOpen={this.handleDrawerOpen}/>
                 <DrawerMUI open={open} handleDrawerClose={this.handleDrawerClose}/>
                 <main className={classes.content}>
+                    <div className={classes.appBarSpacer}/>
                     <Switch>
                         <Route exact path={routes.dashboard} component={Dashboard}/>
                         <Route exact path={routes.clients} component={Clients}/>

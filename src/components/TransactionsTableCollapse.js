@@ -4,7 +4,6 @@ import immutable from 'immutable'
 import {withStyles} from '@material-ui/core/styles/index'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import {Divider} from '@material-ui/core'
 
 const styles = theme => ({
     root: {
@@ -44,7 +43,6 @@ class TransactionsTableCollapse extends React.PureComponent {
                         </Grid>
                     </Typography>
                 </Grid>
-                <Divider/>
                 <Grid item xs={12}>
                     <Typography component="span">
                         <Grid container spacing={16}>

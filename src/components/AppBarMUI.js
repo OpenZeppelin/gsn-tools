@@ -10,9 +10,10 @@ import MenuIcon from '@material-ui/icons/Menu'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 
 const drawerWidth = 240
+
 const styles = theme => ({
     toolbar: {
-        paddingRight: 24, // Keep right padding when drawer closed
+        paddingRight: 24,
     },
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
