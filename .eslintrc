@@ -1,0 +1,139 @@
+{
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true,
+            "jsx": true
+        },
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1,
+                "ignoredNodes": [
+                    "JSXElement *"
+                ],
+                "ignoreComments": false
+            }
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "never"
+        ],
+        "no-console": [
+            "error",
+            {
+                "allow": [
+                    "warn",
+                    "error"
+                ]
+            }
+        ],
+        "object-curly-spacing": [
+            "error",
+            "never"
+        ],
+        "space-infix-ops": [
+            "error"
+        ],
+        "keyword-spacing": [
+            "error",
+            {
+                "before": true,
+                "after": true
+            }
+        ],
+        "space-before-blocks": [
+            "error",
+            "always"
+        ],
+        "spaced-comment": [
+            "error",
+            "always"
+        ],
+        "capitalized-comments": [
+            "error",
+            "always",
+            {
+                "ignorePattern": "pragma|ignored",
+                "ignoreInlineComments": true,
+                "ignoreConsecutiveComments": true
+            }
+        ],
+        "key-spacing": [
+            "error"
+        ],
+        "comma-spacing": [
+            "error"
+        ],
+        "padded-blocks": [
+            "error",
+            "never"
+        ],
+        "react/jsx-closing-bracket-location": [
+            "error",
+            "after-props"
+        ],
+        "react/prop-types": [
+            "error",
+            {
+                "ignore": [
+                    "tracking"
+                ]
+            }
+        ],
+        "react/jsx-indent-props": [
+            "error",
+            "first"
+        ],
+        "react/self-closing-comp": [
+            "error",
+            {
+                "component": true,
+                "html": true
+            }
+        ],
+        "react/jsx-tag-spacing": [
+            "error",
+            {
+                "beforeSelfClosing": "never"
+            }
+        ],
+        "react/jsx-indent": [
+            "error",
+            4
+        ],
+        "react/no-unescaped-entities": [
+            "error",
+            {
+                "forbid": [
+                    ">",
+                    "}"
+                ]
+            }
+        ]
+    }
+}
