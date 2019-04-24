@@ -3,13 +3,16 @@ import PropTypes from 'prop-types'
 import moment from 'moment/moment'
 import ReactTimeAgo from 'react-time-ago'
 import Web3 from 'web3'
-import {withStyles} from '@material-ui/core/styles/index'
-import Table from '@material-ui/core/Table/index'
-import TableBody from '@material-ui/core/TableBody/index'
-import TableCell from '@material-ui/core/TableCell/index'
-import TableRow from '@material-ui/core/TableRow/index'
-import Paper from '@material-ui/core/Paper/index'
-import TableHead from '@material-ui/core/TableHead/index'
+
+import {withStyles} from '@material-ui/core/styles'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableRow from '@material-ui/core/TableRow'
+import Paper from '@material-ui/core/Paper'
+import TableHead from '@material-ui/core/TableHead'
+import Typography from '@material-ui/core/Typography'
+import LinearProgress from '@material-ui/core/LinearProgress'
 
 import {getTransactions} from '../../apis/transactions'
 import {getSorting, stableSort} from '../../utils/sorting'
@@ -35,6 +38,12 @@ const styles = theme => ({
         color: '#3498db',
         textDecoration: 'none',
         cursor: 'pointer',
+    },
+    noData: {
+        ...theme.mixins.gutters(),
+        paddingTop: theme.spacing.unit * 2,
+        paddingBottom: theme.spacing.unit * 2,
+        backgroundColor: theme.palette.action.disabledBackground,
     },
     paper: {
         padding: theme.spacing.unit * 2,
@@ -64,9 +73,17 @@ class LastTransactionsTable extends React.Component {
     }
 
     componentDidMount = () => {
-        getTransactions().then(txs =>
+        getTransactions(this.props.dAppContract).then(txs =>
             this.setState({txs: txs})
         )
+    }
+
+    componentDidUpdate = (prevProps) => {
+        if (this.props.dAppContract !== prevProps.dAppContract) {
+            getTransactions(this.props.dAppContract).then(txs =>
+                this.setState({txs: txs})
+            )
+        }
     }
 
     render = () => {
@@ -74,7 +91,21 @@ class LastTransactionsTable extends React.Component {
         const {txs, order, orderBy, rowsPerPage, page} = this.state
 
         if (!txs) {
-            return null
+            return (
+                <Paper className={classes.noData} elevation={1}>
+                    <LinearProgress variant="query"/>
+                </Paper>
+            )
+        }
+
+        if (txs.size === 0) {
+            return (
+                <Paper className={classes.noData} elevation={1}>
+                    <Typography variant="h6" component="h4">
+                        No transactions were found for this account.
+                    </Typography>
+                </Paper>
+            )
         }
 
         return (
@@ -162,6 +193,7 @@ class LastTransactionsTable extends React.Component {
 
 LastTransactionsTable.propTypes = {
     classes: PropTypes.object.isRequired,
+    dAppContract: PropTypes.string,
 }
 
 export default withStyles(styles)(LastTransactionsTable)

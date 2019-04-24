@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import immutable from 'immutable'
-import {withStyles} from '@material-ui/core/styles/index'
-import Typography from '@material-ui/core/Typography/index'
-import Grid from '@material-ui/core/Grid/index'
+import {withStyles} from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import Grid from '@material-ui/core/Grid'
 
 const styles = theme => ({
     root: {

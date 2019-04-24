@@ -2,11 +2,11 @@ import React, {Fragment} from 'react'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
 import classNames from 'classnames'
-import {withStyles} from '@material-ui/core/styles/index'
-import Typography from '@material-ui/core/Typography/index'
-import Card from '@material-ui/core/Card/index'
-import CardContent from '@material-ui/core/CardContent/index'
-import Grid from '@material-ui/core/Grid/index'
+import {withStyles} from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import Grid from '@material-ui/core/Grid'
 
 import ClientsPerDay from '../clients/ClientsPerDay'
 import LastTransactionsTable from '../transactions/LastTransactionsTable'
@@ -32,6 +32,9 @@ const styles = ({
         textDecoration: 'none',
         cursor: 'pointer',
     },
+    link: {
+        cursor: 'pointer',
+    },
     chartContainer: {
         marginLeft: -22,
     },
@@ -54,22 +57,25 @@ class Dashboard extends React.Component {
         return (
             <Fragment>
                 <Grid container>
-                    <Grid item xs={12}>
-                        <Card className={classes.card}>
-                            <CardContent className={classNames(classes.zero, className)} {...other}>
-                                <Typography component="span">
-                                    <Grid container spacing={16}>
-                                        <Grid item>
-                                            <label className={classes.strong}>Dapp Contract:</label>
+                    {
+                        dAppContract &&
+                        <Grid item xs={12} onClick={openModalContractUpdate} className={classes.link}>
+                            <Card className={classes.card}>
+                                <CardContent className={classNames(classes.zero, className)} {...other}>
+                                    <Typography component="span">
+                                        <Grid container spacing={16}>
+                                            <Grid item>
+                                                <label className={classes.strong}>Dapp Contract:</label>
+                                            </Grid>
+                                            <Grid item>
+                                                {dAppContract}
+                                            </Grid>
                                         </Grid>
-                                        <Grid item onClick={openModalContractUpdate}>
-                                            {dAppContract}
-                                        </Grid>
-                                    </Grid>
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    }
                     <Grid item xs={12}>
                         <Typography
                             variant="h5"
@@ -93,7 +99,7 @@ class Dashboard extends React.Component {
                             Last Transactions
                         </Typography>
                         <div className={classes.tableContainer}>
-                            <LastTransactionsTable/>
+                            <LastTransactionsTable dAppContract={dAppContract}/>
                         </div>
                     </Grid>
                 </Grid>

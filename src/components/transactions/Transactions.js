@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react'
 import PropTypes from 'prop-types'
-import {withStyles} from '@material-ui/core/styles/index'
-import Typography from '@material-ui/core/Typography/index'
+import {withStyles} from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 
 import TransactionsTable from './TransactionsTable'
 
@@ -14,7 +14,7 @@ const styles = ({
 
 class Transactions extends React.Component {
     render = () => {
-        const {classes} = this.props
+        const {classes, dAppContract} = this.props
 
         return (
             <Fragment>
@@ -22,7 +22,7 @@ class Transactions extends React.Component {
                     Transactions
                 </Typography>
                 <div className={classes.tableContainer}>
-                    <TransactionsTable/>
+                    <TransactionsTable dAppContract={dAppContract}/>
                 </div>
             </Fragment>
         )
@@ -31,6 +31,7 @@ class Transactions extends React.Component {
 
 Transactions.propTypes = {
     classes: PropTypes.object.isRequired,
+    dAppContract: PropTypes.string,
 }
 
 export default withStyles(styles)(Transactions)

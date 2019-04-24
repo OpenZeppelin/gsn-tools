@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+
 import {withStyles} from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -10,6 +11,9 @@ import MenuIcon from '@material-ui/icons/Menu'
 import Lock from '@material-ui/icons/Lock'
 import LockOpen from '@material-ui/icons/LockOpen'
 import Avatar from '@material-ui/core/Avatar'
+import Tooltip from '@material-ui/core/Tooltip'
+
+import {arrowGenerator} from '../../utils/components'
 
 const drawerWidth = 240
 
@@ -45,10 +49,53 @@ const styles = theme => ({
     avatar: {
         color: '#fff',
     },
+    arrowPopper: arrowGenerator(theme.palette.grey[700]),
+    arrow: {
+        position: 'absolute',
+        fontSize: 6,
+        width: '3em',
+        height: '3em',
+        '&::before': {
+            content: '""',
+            margin: 'auto',
+            display: 'block',
+            width: 0,
+            height: 0,
+            borderStyle: 'solid',
+        },
+    },
+    bootstrapPopper: arrowGenerator(theme.palette.action.active),
+    bootstrapTooltip: {
+        backgroundColor: theme.palette.action.active,
+    },
+    bootstrapPlacementLeft: {
+        margin: '0 8px',
+    },
+    htmlPopper: arrowGenerator('#dadde9'),
+    htmlTooltip: {
+        backgroundColor: '#f5f5f9',
+        color: 'rgba(0, 0, 0, 0.87)',
+        maxWidth: 220,
+        fontSize: theme.typography.pxToRem(12),
+        border: '1px solid #dadde9',
+        '& b': {
+            fontWeight: theme.typography.fontWeightMedium,
+        },
+    },
 })
 
 
 class Dashboard extends React.Component {
+    state = {
+        arrowRef: null,
+    }
+
+    handleArrowRef = node => {
+        this.setState({
+            arrowRef: node,
+        })
+    }
+
     render() {
         const {classes, handleDrawerOpen, open, dAppContract, openModalContractUpdate} = this.props
 
@@ -70,19 +117,47 @@ class Dashboard extends React.Component {
                         color="inherit"
                         noWrap
                         className={classes.title}>
-                        GSN Dapp Tool By Zeppelin
+                        GSN Dapp Management Tool By Zeppelin
                     </Typography>
                     <div>
-                        <IconButton
-                            aria-owns={open ? 'menu-appbar' : undefined}
-                            aria-haspopup="true"
-                            color="inherit"
-                            onClick={openModalContractUpdate}>
-                            <Avatar className={classes.avatar}>
-                                {dAppContract && <Lock/>}
-                                {!dAppContract && <LockOpen/>}
-                            </Avatar>
-                        </IconButton>
+                        <Tooltip
+                            title={
+                                <Fragment>
+                                    <center>
+                                        Update<br/>DApp Contract
+                                    </center>
+                                    <span className={classes.arrow} ref={this.handleArrowRef}/>
+                                </Fragment>
+                            }
+                            disableFocusListener={true}
+                            TransitionProps={{timeout: 600}}
+                            placement='left'
+                            classes={{
+                                tooltip: classes.bootstrapTooltip,
+                                popper: classes.bootstrapPopper,
+                                tooltipPlacementLeft: classes.bootstrapPlacementLeft,
+                            }}
+                            PopperProps={{
+                                popperOptions: {
+                                    modifiers: {
+                                        arrow: {
+                                            enabled: Boolean(this.state.arrowRef),
+                                            element: this.state.arrowRef,
+                                        },
+                                    },
+                                },
+                            }}>
+                            <IconButton
+                                aria-owns={open ? 'menu-appbar' : undefined}
+                                aria-haspopup="true"
+                                color="inherit"
+                                onClick={openModalContractUpdate}>
+                                <Avatar className={classes.avatar}>
+                                    {dAppContract && <Lock/>}
+                                    {!dAppContract && <LockOpen/>}
+                                </Avatar>
+                            </IconButton>
+                        </Tooltip>
                     </div>
                 </Toolbar>
             </AppBar>

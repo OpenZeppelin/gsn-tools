@@ -1,8 +1,8 @@
 import React from 'react'
 import {Route, Switch} from 'react-router'
 import PropTypes from 'prop-types'
-import {withStyles} from '@material-ui/core/styles/index'
-import CssBaseline from '@material-ui/core/CssBaseline/index'
+import {withStyles} from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
 
 import DrawerMUI from './DrawerMUI'
 import AppBarMUI from './AppBarMUI'
@@ -30,7 +30,7 @@ const styles = theme => ({
 class Layout extends React.Component {
     state = {
         open: false,
-        dAppContract: '0x066719a77148f332B55870EDb8058b71888b10FD',
+        dAppContract: '0x46b03Afe43786147D78DABaA734864dE459DFb93',
         openContractModal: false,
     }
 
@@ -70,13 +70,15 @@ class Layout extends React.Component {
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer}/>
                     <Switch>
-                        <Route exact path={routes.dashboard} component={() =>
+                        <Route exact path={routes.dashboard} render={() =>
                             <Dashboard
                                 dAppContract={dAppContract}
                                 openModalContractUpdate={this.updateModalContract}/>
                         }/>
                         <Route exact path={routes.clients} component={Clients}/>
-                        <Route exact path={routes.transactions} component={Transactions}/>
+                        <Route exact path={routes.transactions} render={() =>
+                            <Transactions dAppContract={dAppContract}/>
+                        }/>
                         <Route component={Blank}/>
                     </Switch>
                     <UpdateDAppContractModal
