@@ -11,6 +11,7 @@ import Blank from '../Blank'
 import Clients from '../clients/Clients'
 import Transactions from '../transactions/Transactions'
 import Dashboard from '../dashboard/Dashboard'
+import UpdateDAppContractModal from '../dashboard/UpdateDAppContractModal'
 
 const styles = theme => ({
     appBarSpacer: theme.mixins.toolbar,
@@ -29,6 +30,8 @@ const styles = theme => ({
 class Layout extends React.Component {
     state = {
         open: false,
+        dAppContract: '0x066719a77148f332B55870EDb8058b71888b10FD',
+        openContractModal: false,
     }
 
     handleDrawerOpen = () => {
@@ -39,23 +42,47 @@ class Layout extends React.Component {
         this.setState({open: false})
     }
 
+    updateModalContract = () => {
+        this.setState((prevState) => ({
+            openContractModal: !prevState.openContractModal
+        }))
+    }
+
+    updateDAppContract = (contract) => {
+        this.setState({dAppContract: contract}, () => {
+            this.updateModalContract()
+        })
+    }
+
     render() {
         const {classes} = this.props
-        const {open} = this.state
+        const {open, dAppContract, openContractModal} = this.state
 
         return (
             <div className={classes.root}>
                 <CssBaseline/>
-                <AppBarMUI open={open} handleDrawerOpen={this.handleDrawerOpen}/>
+                <AppBarMUI
+                    open={open}
+                    dAppContract={dAppContract}
+                    openModalContractUpdate={this.updateModalContract}
+                    handleDrawerOpen={this.handleDrawerOpen}/>
                 <DrawerMUI open={open} handleDrawerClose={this.handleDrawerClose}/>
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer}/>
                     <Switch>
-                        <Route exact path={routes.dashboard} component={Dashboard}/>
+                        <Route exact path={routes.dashboard} component={() =>
+                            <Dashboard
+                                dAppContract={dAppContract}
+                                openModalContractUpdate={this.updateModalContract}/>
+                        }/>
                         <Route exact path={routes.clients} component={Clients}/>
                         <Route exact path={routes.transactions} component={Transactions}/>
                         <Route component={Blank}/>
                     </Switch>
+                    <UpdateDAppContractModal
+                        openModalContractUpdate={this.updateModalContract}
+                        updateDAppContract={this.updateDAppContract}
+                        shouldOpen={openContractModal}/>
                 </main>
             </div>
         )

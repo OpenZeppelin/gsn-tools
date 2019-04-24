@@ -45,13 +45,12 @@ const styles = ({
 
 
 class Dashboard extends React.Component {
-    state = {
-        dappContract: '0x066719a77148f332B55870EDb8058b71888b10FD',
+    shouldComponentUpdate = (nextProps) => {
+        return this.props.dAppContract !== nextProps.dAppContract
     }
 
     render() {
-        const {classes, className, ...other} = this.props
-        const {dappContract} = this.state
+        const {dAppContract, openModalContractUpdate, classes, className, ...other} = this.props
         return (
             <Fragment>
                 <Grid container>
@@ -63,8 +62,8 @@ class Dashboard extends React.Component {
                                         <Grid item>
                                             <label className={classes.strong}>Dapp Contract:</label>
                                         </Grid>
-                                        <Grid item>
-                                            {dappContract}
+                                        <Grid item onClick={openModalContractUpdate}>
+                                            {dAppContract}
                                         </Grid>
                                     </Grid>
                                 </Typography>
@@ -106,6 +105,8 @@ class Dashboard extends React.Component {
 Dashboard.propTypes = {
     classes: PropTypes.object.isRequired,
     className: PropTypes.string,
+    dAppContract: PropTypes.string,
+    openModalContractUpdate: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(Dashboard)

@@ -1,13 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import {withStyles} from '@material-ui/core/styles/index'
-import AppBar from '@material-ui/core/AppBar/index'
-import Toolbar from '@material-ui/core/Toolbar/index'
-import Typography from '@material-ui/core/Typography/index'
-import IconButton from '@material-ui/core/IconButton/index'
+import {withStyles} from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
-import AccountCircle from '@material-ui/icons/AccountCircle'
+import Lock from '@material-ui/icons/Lock'
+import LockOpen from '@material-ui/icons/LockOpen'
+import Avatar from '@material-ui/core/Avatar'
 
 const drawerWidth = 240
 
@@ -40,12 +42,15 @@ const styles = theme => ({
     title: {
         flexGrow: 1,
     },
+    avatar: {
+        color: '#fff',
+    },
 })
 
 
 class Dashboard extends React.Component {
     render() {
-        const {classes, handleDrawerOpen, open} = this.props
+        const {classes, handleDrawerOpen, open, dAppContract, openModalContractUpdate} = this.props
 
         return (
             <AppBar
@@ -71,8 +76,12 @@ class Dashboard extends React.Component {
                         <IconButton
                             aria-owns={open ? 'menu-appbar' : undefined}
                             aria-haspopup="true"
-                            color="inherit">
-                            <AccountCircle/>
+                            color="inherit"
+                            onClick={openModalContractUpdate}>
+                            <Avatar className={classes.avatar}>
+                                {dAppContract && <Lock/>}
+                                {!dAppContract && <LockOpen/>}
+                            </Avatar>
                         </IconButton>
                     </div>
                 </Toolbar>
@@ -81,11 +90,12 @@ class Dashboard extends React.Component {
     }
 }
 
-
 Dashboard.propTypes = {
     classes: PropTypes.object.isRequired,
     handleDrawerOpen: PropTypes.func,
     open: PropTypes.bool,
+    dAppContract: PropTypes.string,
+    openModalContractUpdate: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(Dashboard)
