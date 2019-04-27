@@ -75,9 +75,11 @@ class TransactionsTable extends React.Component {
 
     componentDidUpdate = (prevProps) => {
         if (this.props.address !== prevProps.address) {
-            getTransactions(this.props.address).then(txs =>
-                this.setState({txs: txs})
-            )
+            this.setState({txs: null}, () => {
+                getTransactions(this.props.address).then(txs =>
+                    this.setState({txs: txs})
+                )
+            })
         }
     }
 

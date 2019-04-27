@@ -10,7 +10,14 @@ import en from 'javascript-time-ago/locale/en'
 import configureStore from './modules/store'
 import App from './components/App'
 
-const reduxStore = configureStore(immutable.Map())
+const reduxStore = configureStore(immutable.Map({
+    contract: immutable.Map({
+        isFetching: false,
+        data: immutable.Map({
+            address: '0x46b03Afe43786147D78DABaA734864dE459DFb93'
+        })
+    })
+}))
 
 JavascriptTimeAgo.locale(en)
 

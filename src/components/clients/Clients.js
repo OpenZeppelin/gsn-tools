@@ -24,7 +24,7 @@ class Clients extends React.Component {
         return (
             <Fragment>
                 <Typography variant="h4" gutterBottom component="h2">
-                    Transactions
+                    Clients
                 </Typography>
                 <div className={classes.tableContainer}>
                     <Paper className={classes.noData} elevation={1}>

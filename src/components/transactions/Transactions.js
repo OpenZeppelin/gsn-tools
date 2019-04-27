@@ -6,7 +6,6 @@ import {withStyles} from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
 import TransactionsTable from './TransactionsTable'
-import {fetchContractIfNeeded} from '../../modules/actions/contract'
 
 const styles = ({
     tableContainer: {
@@ -16,11 +15,6 @@ const styles = ({
 
 
 class Transactions extends React.Component {
-    componentDidMount() {
-        const {dispatch} = this.props
-        dispatch(fetchContractIfNeeded())
-    }
-
     shouldComponentUpdate = (nextProps) => {
         return this.props.contract !== nextProps.contract
     }

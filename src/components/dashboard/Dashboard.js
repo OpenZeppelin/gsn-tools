@@ -14,7 +14,7 @@ import Grid from '@material-ui/core/Grid'
 import ClientsPerDay from '../clients/ClientsPerDay'
 import LastTransactionsTable from '../transactions/LastTransactionsTable'
 import {buildUrl, routes} from '../../utils/routes'
-import {fetchContractIfNeeded} from '../../modules/actions/contract'
+import {showModalUpdateContract} from '../../modules/actions/contractModal'
 
 const styles = ({
     zero: {
@@ -52,17 +52,17 @@ const styles = ({
 
 
 class Dashboard extends React.Component {
-    componentDidMount() {
-        const {dispatch} = this.props
-        dispatch(fetchContractIfNeeded())
-    }
-
     shouldComponentUpdate = (nextProps) => {
         return this.props.contract !== nextProps.contract
     }
 
+    handleShowModal = () => {
+        const {dispatch} = this.props
+        dispatch(showModalUpdateContract())
+    }
+
     render() {
-        const {contract, isFetchingContract, classes, className, ...other} = this.props
+        const {contract, isFetchingContract, classes, className} = this.props
 
         if (isFetchingContract) {
             return null
@@ -71,9 +71,9 @@ class Dashboard extends React.Component {
         return (
             <Fragment>
                 <Grid container>
-                    <Grid item xs={12} className={classes.link}>
+                    <Grid item xs={12} className={classes.link} onClick={this.handleShowModal}>
                         <Card className={classes.card}>
-                            <CardContent className={classNames(classes.zero, className)} {...other}>
+                            <CardContent className={classNames(classes.zero, className)}>
                                 <Typography component="span">
                                     <Grid container spacing={16}>
                                         <Grid item>
@@ -124,7 +124,6 @@ Dashboard.propTypes = {
     className: PropTypes.string,
     contract: PropTypes.instanceOf(immutable.Map).isRequired,
     isFetchingContract: PropTypes.bool.isRequired,
-    openModalContractUpdate: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired,
 }
 

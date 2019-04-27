@@ -1,6 +1,7 @@
 import React from 'react'
 import {Route, Switch} from 'react-router'
 import * as PropTypes from 'prop-types'
+
 import {withStyles} from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 
@@ -29,44 +30,28 @@ const styles = theme => ({
 
 class Layout extends React.Component {
     state = {
-        open: false,
-        dAppContract: '0x46b03Afe43786147D78DABaA734864dE459DFb93',
-        openContractModal: false,
+        openDrawer: false,
     }
 
     handleDrawerOpen = () => {
-        this.setState({open: true})
+        this.setState({openDrawer: true})
     }
 
     handleDrawerClose = () => {
-        this.setState({open: false})
-    }
-
-    updateModalContract = () => {
-        this.setState((prevState) => ({
-            openContractModal: !prevState.openContractModal
-        }))
-    }
-
-    updateDAppContract = (contract) => {
-        this.setState({dAppContract: contract}, () => {
-            this.updateModalContract()
-        })
+        this.setState({openDrawer: false})
     }
 
     render() {
         const {classes} = this.props
-        const {open, dAppContract, openContractModal} = this.state
+        const {openDrawer} = this.state
 
         return (
             <div className={classes.root}>
                 <CssBaseline/>
                 <AppBarMUI
-                    open={open}
-                    dAppContract={dAppContract}
-                    openModalContractUpdate={this.updateModalContract}
+                    open={openDrawer}
                     handleDrawerOpen={this.handleDrawerOpen}/>
-                <DrawerMUI open={open} handleDrawerClose={this.handleDrawerClose}/>
+                <DrawerMUI open={openDrawer} handleDrawerClose={this.handleDrawerClose}/>
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer}/>
                     <Switch>
@@ -79,10 +64,7 @@ class Layout extends React.Component {
                         }/>
                         <Route component={Blank}/>
                     </Switch>
-                    <UpdateDAppContractModal
-                        openModalContractUpdate={this.updateModalContract}
-                        updateDAppContract={this.updateDAppContract}
-                        shouldOpen={openContractModal}/>
+                    <UpdateDAppContractModal/>
                 </main>
             </div>
         )

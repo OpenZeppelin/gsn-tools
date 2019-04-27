@@ -1,6 +1,8 @@
 import React, {Fragment} from 'react'
-import PropTypes from 'prop-types'
+import * as PropTypes from 'prop-types'
 import classNames from 'classnames'
+import * as immutable from 'immutable'
+import {connect} from 'react-redux'
 
 import {withStyles} from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
@@ -14,6 +16,7 @@ import Avatar from '@material-ui/core/Avatar'
 import Tooltip from '@material-ui/core/Tooltip'
 
 import {arrowGenerator} from '../../utils/components'
+import {showModalUpdateContract} from '../../modules/actions/contractModal'
 
 const drawerWidth = 240
 
@@ -85,9 +88,14 @@ const styles = theme => ({
 })
 
 
-class Dashboard extends React.Component {
+class AppBarMUI extends React.Component {
     state = {
         arrowRef: null,
+    }
+
+    handleShowModal = () => {
+        const {dispatch} = this.props
+        dispatch(showModalUpdateContract())
     }
 
     handleArrowRef = node => {
@@ -96,8 +104,39 @@ class Dashboard extends React.Component {
         })
     }
 
+    renderLockButton = () => {
+        const {classes, contract, open} = this.props
+        if (contract) {
+            return (
+                <IconButton
+                    aria-owns={open ? 'menu-appbar' : undefined}
+                    aria-haspopup="true"
+                    color="inherit"
+                    onClick={this.handleShowModal}>
+                    <Avatar className={classes.avatar}>
+                        <Lock/>
+                    </Avatar>
+                </IconButton>
+            )
+        }
+        return (
+            <IconButton
+                aria-owns={open ? 'menu-appbar' : undefined}
+                aria-haspopup="true"
+                color="inherit">
+                <Avatar className={classes.avatar}>
+                    <LockOpen/>
+                </Avatar>
+            </IconButton>
+        )
+    }
+
     render() {
-        const {classes, handleDrawerOpen, open, dAppContract, openModalContractUpdate} = this.props
+        const {classes, isFetchingContract, handleDrawerOpen, open} = this.props
+
+        if (isFetchingContract) {
+            return null
+        }
 
         return (
             <AppBar
@@ -147,16 +186,7 @@ class Dashboard extends React.Component {
                                     },
                                 },
                             }}>
-                            <IconButton
-                                aria-owns={open ? 'menu-appbar' : undefined}
-                                aria-haspopup="true"
-                                color="inherit"
-                                onClick={openModalContractUpdate}>
-                                <Avatar className={classes.avatar}>
-                                    {dAppContract && <Lock/>}
-                                    {!dAppContract && <LockOpen/>}
-                                </Avatar>
-                            </IconButton>
+                            {this.renderLockButton()}
                         </Tooltip>
                     </div>
                 </Toolbar>
@@ -165,12 +195,21 @@ class Dashboard extends React.Component {
     }
 }
 
-Dashboard.propTypes = {
+AppBarMUI.propTypes = {
     classes: PropTypes.object.isRequired,
     handleDrawerOpen: PropTypes.func,
     open: PropTypes.bool,
-    dAppContract: PropTypes.string,
-    openModalContractUpdate: PropTypes.func.isRequired,
+    contract: PropTypes.instanceOf(immutable.Map).isRequired,
+    isFetchingContract: PropTypes.bool.isRequired,
+    dispatch: PropTypes.func.isRequired,
 }
 
-export default withStyles(styles)(Dashboard)
+const mapStateToProps = (state) => {
+    const contract = state.get('contract') || immutable.Map({isFetching: true, data: immutable.Map()})
+    return {
+        contract: contract.get('data'),
+        isFetchingContract: contract.get('isFetching')
+    }
+}
+
+export default withStyles(styles)(connect(mapStateToProps)(AppBarMUI))
