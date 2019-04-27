@@ -14,7 +14,7 @@ import TableHead from '@material-ui/core/TableHead'
 import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
-import {getTransactions} from '../../apis/transactions'
+import {getTransactions} from '../../apis/etherscan'
 import {getSorting, stableSort} from '../../utils/sorting'
 
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
@@ -73,14 +73,14 @@ class LastTransactionsTable extends React.Component {
     }
 
     componentDidMount = () => {
-        getTransactions(this.props.dAppContract).then(txs =>
+        getTransactions(this.props.address).then(txs =>
             this.setState({txs: txs})
         )
     }
 
     componentDidUpdate = (prevProps) => {
-        if (this.props.dAppContract !== prevProps.dAppContract) {
-            getTransactions(this.props.dAppContract).then(txs =>
+        if (this.props.address !== prevProps.address) {
+            getTransactions(this.props.address).then(txs =>
                 this.setState({txs: txs})
             )
         }
@@ -193,7 +193,7 @@ class LastTransactionsTable extends React.Component {
 
 LastTransactionsTable.propTypes = {
     classes: PropTypes.object.isRequired,
-    dAppContract: PropTypes.string,
+    address: PropTypes.string,
 }
 
 export default withStyles(styles)(LastTransactionsTable)

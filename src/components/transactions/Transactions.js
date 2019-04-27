@@ -1,9 +1,12 @@
 import React, {Fragment} from 'react'
-import PropTypes from 'prop-types'
+import * as immutable from 'immutable'
+import {connect} from 'react-redux'
+import * as PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
 import TransactionsTable from './TransactionsTable'
+import {fetchContractIfNeeded} from '../../modules/actions/contract'
 
 const styles = ({
     tableContainer: {
@@ -13,8 +16,21 @@ const styles = ({
 
 
 class Transactions extends React.Component {
+    componentDidMount() {
+        const {dispatch} = this.props
+        dispatch(fetchContractIfNeeded())
+    }
+
+    shouldComponentUpdate = (nextProps) => {
+        return this.props.contract !== nextProps.contract
+    }
+
     render = () => {
-        const {classes, dAppContract} = this.props
+        const {contract, isFetchingContract, classes} = this.props
+
+        if (isFetchingContract) {
+            return null
+        }
 
         return (
             <Fragment>
@@ -22,7 +38,7 @@ class Transactions extends React.Component {
                     Transactions
                 </Typography>
                 <div className={classes.tableContainer}>
-                    <TransactionsTable dAppContract={dAppContract}/>
+                    <TransactionsTable address={contract.get('address')}/>
                 </div>
             </Fragment>
         )
@@ -31,7 +47,17 @@ class Transactions extends React.Component {
 
 Transactions.propTypes = {
     classes: PropTypes.object.isRequired,
-    dAppContract: PropTypes.string,
+    contract: PropTypes.instanceOf(immutable.Map).isRequired,
+    isFetchingContract: PropTypes.bool.isRequired,
+    dispatch: PropTypes.func.isRequired,
 }
 
-export default withStyles(styles)(Transactions)
+const mapStateToProps = (state) => {
+    const contract = state.get('contract') || immutable.Map({isFetching: true, data: immutable.Map()})
+    return {
+        contract: contract.get('data'),
+        isFetchingContract: contract.get('isFetching')
+    }
+}
+
+export default withStyles(styles)(connect(mapStateToProps)(Transactions))

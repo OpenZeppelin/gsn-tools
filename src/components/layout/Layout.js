@@ -1,6 +1,6 @@
 import React from 'react'
 import {Route, Switch} from 'react-router'
-import PropTypes from 'prop-types'
+import * as PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 
@@ -71,13 +71,11 @@ class Layout extends React.Component {
                     <div className={classes.appBarSpacer}/>
                     <Switch>
                         <Route exact path={routes.dashboard} render={() =>
-                            <Dashboard
-                                dAppContract={dAppContract}
-                                openModalContractUpdate={this.updateModalContract}/>
+                            <Dashboard/>
                         }/>
                         <Route exact path={routes.clients} component={Clients}/>
                         <Route exact path={routes.transactions} render={() =>
-                            <Transactions dAppContract={dAppContract}/>
+                            <Transactions/>
                         }/>
                         <Route component={Blank}/>
                     </Switch>
