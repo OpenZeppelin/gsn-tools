@@ -10,13 +10,12 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
-import Lock from '@material-ui/icons/Lock'
-import LockOpen from '@material-ui/icons/LockOpen'
+import ExitToApp from '@material-ui/icons/ExitToApp'
 import Avatar from '@material-ui/core/Avatar'
 import Tooltip from '@material-ui/core/Tooltip'
 
 import {arrowGenerator} from '../../utils/components'
-import {showModalUpdateContract} from '../../modules/actions/contractModal'
+import {receiveContract} from '../../modules/actions/contract'
 
 const drawerWidth = 240
 
@@ -93,42 +92,22 @@ class AppBarMUI extends React.Component {
         arrowRef: null,
     }
 
-    handleShowModal = () => {
+    handleLeaveApp = () => {
         const {dispatch} = this.props
-        dispatch(showModalUpdateContract())
+        dispatch(receiveContract(immutable.Map({
+            contract: immutable.Map({
+                isFetching: false,
+                data: immutable.Map({
+                    address: null
+                })
+            })
+        })))
     }
 
     handleArrowRef = node => {
         this.setState({
             arrowRef: node,
         })
-    }
-
-    renderLockButton = () => {
-        const {classes, contract, open} = this.props
-        if (contract) {
-            return (
-                <IconButton
-                    aria-owns={open ? 'menu-appbar' : undefined}
-                    aria-haspopup="true"
-                    color="inherit"
-                    onClick={this.handleShowModal}>
-                    <Avatar className={classes.avatar}>
-                        <Lock/>
-                    </Avatar>
-                </IconButton>
-            )
-        }
-        return (
-            <IconButton
-                aria-owns={open ? 'menu-appbar' : undefined}
-                aria-haspopup="true"
-                color="inherit">
-                <Avatar className={classes.avatar}>
-                    <LockOpen/>
-                </Avatar>
-            </IconButton>
-        )
     }
 
     render() {
@@ -162,9 +141,7 @@ class AppBarMUI extends React.Component {
                         <Tooltip
                             title={
                                 <Fragment>
-                                    <center>
-                                        Update<br/>DApp Contract
-                                    </center>
+                                    Leave App
                                     <span className={classes.arrow} ref={this.handleArrowRef}/>
                                 </Fragment>
                             }
@@ -186,7 +163,15 @@ class AppBarMUI extends React.Component {
                                     },
                                 },
                             }}>
-                            {this.renderLockButton()}
+                            <IconButton
+                                aria-owns={open ? 'menu-appbar' : undefined}
+                                aria-haspopup="true"
+                                color="inherit"
+                                onClick={this.handleLeaveApp}>
+                                <Avatar className={classes.avatar}>
+                                    <ExitToApp/>
+                                </Avatar>
+                            </IconButton>
                         </Tooltip>
                     </div>
                 </Toolbar>

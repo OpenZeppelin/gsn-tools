@@ -14,7 +14,7 @@ import {receiveContract} from '../../modules/actions/contract'
 import {hideModalUpdateContract} from '../../modules/actions/contractModal'
 
 
-class UpdateDAppContractModal extends React.Component {
+class UpdateContractModal extends React.Component {
     state = {
         address: '',
         shouldOpen: false,
@@ -72,7 +72,7 @@ class UpdateDAppContractModal extends React.Component {
     }
 }
 
-UpdateDAppContractModal.propTypes = {
+UpdateContractModal.propTypes = {
     dispatch: PropTypes.func.isRequired,
     show: PropTypes.bool.isRequired,
 }
@@ -84,4 +84,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(UpdateDAppContractModal)
+export default connect(mapStateToProps)(UpdateContractModal)
