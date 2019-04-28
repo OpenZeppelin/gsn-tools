@@ -45,6 +45,7 @@ const styles = theme => ({
     },
     noData: {
         ...theme.mixins.gutters(),
+        marginTop: theme.spacing.unit * 2,
         paddingTop: theme.spacing.unit * 2,
         paddingBottom: theme.spacing.unit * 2,
         backgroundColor: theme.palette.action.disabledBackground,

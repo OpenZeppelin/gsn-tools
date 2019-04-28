@@ -26,8 +26,8 @@ const styles = ({
         }
     },
     strong: {
-        fontWeight: 550,
-        fontSize: 18,
+        fontWeight: 350,
+        fontSize: `${1.35}em`,
     },
     linkTitle: {
         paddingTop: 16,
@@ -75,9 +75,9 @@ class Dashboard extends React.Component {
                         <Card className={classes.card}>
                             <CardContent className={classNames(classes.zero, className)}>
                                 <Typography component="span">
-                                    <Grid container spacing={16}>
+                                    <Grid container spacing={16} className={classes.strong}>
                                         <Grid item>
-                                            <label className={classes.strong}>Dapp Contract:</label>
+                                            <label>Dapp Contract:</label>
                                         </Grid>
                                         <Grid item>
                                             {contract.get('address')}
@@ -89,7 +89,7 @@ class Dashboard extends React.Component {
                     </Grid>
                     <Grid item xs={12}>
                         <Typography
-                            variant="h5"
+                            variant="h6"
                             className={classNames(classes.linkTitle, classes.strong)}
                             component={props => <Link to={buildUrl(routes.clients)} {...props}/>}>
                             Clients per day

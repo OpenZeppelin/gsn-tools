@@ -11,6 +11,10 @@ const styles = ({
     tableContainer: {
         height: 320,
     },
+    title: {
+        fontWeight: 300,
+        fontSize: `${1.75}em`,
+    },
 })
 
 
@@ -28,7 +32,7 @@ class Transactions extends React.Component {
 
         return (
             <Fragment>
-                <Typography variant="h4" gutterBottom component="h2">
+                <Typography variant="h5" className={classes.title}>
                     Transactions
                 </Typography>
                 <div className={classes.tableContainer}>

@@ -27,6 +27,10 @@ const styles = theme => ({
             marginRight: 'auto',
         },
     },
+    title: {
+        fontWeight: 300,
+        fontSize: `${1.75}em`,
+    },
     paper: {
         marginTop: theme.spacing.unit * 8,
         display: 'flex',
@@ -73,7 +77,7 @@ class Landing extends React.Component {
                     <Typography className={classes.logo}>
                         <ZeppelinLogo/>
                     </Typography>
-                    <Typography component="h1" variant="h5">
+                    <Typography variant="h5" className={classes.title}>
                         DApp Management Tool
                     </Typography>
                     <form className={classes.form} onSubmit={this.handleSubmit}>

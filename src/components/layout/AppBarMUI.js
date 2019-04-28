@@ -43,6 +43,8 @@ const styles = theme => ({
     },
     title: {
         flexGrow: 1,
+        fontWeight: 300,
+        fontSize: `${1.75}em`,
     },
 })
 
@@ -84,7 +86,7 @@ class AppBarMUI extends React.Component {
                         <MenuIcon/>
                     </IconButton>
                     <Typography
-                        component="h1"
+                        component="h4"
                         variant="h6"
                         color="inherit"
                         noWrap
