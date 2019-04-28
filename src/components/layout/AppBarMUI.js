@@ -1,10 +1,10 @@
-import React, {Fragment} from 'react'
+import React from 'react'
 import * as PropTypes from 'prop-types'
 import classNames from 'classnames'
 import * as immutable from 'immutable'
 import {connect} from 'react-redux'
 
-import {withStyles} from '@material-ui/core/styles'
+import {withStyles, withTheme} from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -12,16 +12,12 @@ import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import ExitToApp from '@material-ui/icons/ExitToApp'
 import Avatar from '@material-ui/core/Avatar'
-import Tooltip from '@material-ui/core/Tooltip'
 
-import {arrowGenerator} from '../../utils/components'
 import {receiveContract} from '../../modules/actions/contract'
-
-const drawerWidth = 240
 
 const styles = theme => ({
     toolbar: {
-        paddingRight: 24,
+        paddingRight: theme.spacing.unit * 3,
     },
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
@@ -31,8 +27,8 @@ const styles = theme => ({
         }),
     },
     appBarShift: {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: theme.drawerWidth,
+        width: `calc(100% - ${theme.drawerWidth}px)`,
         transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
@@ -47,42 +43,6 @@ const styles = theme => ({
     },
     title: {
         flexGrow: 1,
-    },
-    avatar: {
-        color: '#fff',
-    },
-    arrowPopper: arrowGenerator(theme.palette.grey[700]),
-    arrow: {
-        position: 'absolute',
-        fontSize: 6,
-        width: '3em',
-        height: '3em',
-        '&::before': {
-            content: '""',
-            margin: 'auto',
-            display: 'block',
-            width: 0,
-            height: 0,
-            borderStyle: 'solid',
-        },
-    },
-    bootstrapPopper: arrowGenerator(theme.palette.action.active),
-    bootstrapTooltip: {
-        backgroundColor: theme.palette.action.active,
-    },
-    bootstrapPlacementLeft: {
-        margin: '0 8px',
-    },
-    htmlPopper: arrowGenerator('#dadde9'),
-    htmlTooltip: {
-        backgroundColor: '#f5f5f9',
-        color: 'rgba(0, 0, 0, 0.87)',
-        maxWidth: 220,
-        fontSize: theme.typography.pxToRem(12),
-        border: '1px solid #dadde9',
-        '& b': {
-            fontWeight: theme.typography.fontWeightMedium,
-        },
     },
 })
 
@@ -102,12 +62,6 @@ class AppBarMUI extends React.Component {
                 })
             })
         })))
-    }
-
-    handleArrowRef = node => {
-        this.setState({
-            arrowRef: node,
-        })
     }
 
     render() {
@@ -138,41 +92,15 @@ class AppBarMUI extends React.Component {
                         GSN DApp Management Tool By Zeppelin
                     </Typography>
                     <div>
-                        <Tooltip
-                            title={
-                                <Fragment>
-                                    Leave App
-                                    <span className={classes.arrow} ref={this.handleArrowRef}/>
-                                </Fragment>
-                            }
-                            disableFocusListener={true}
-                            TransitionProps={{timeout: 600}}
-                            placement='left'
-                            classes={{
-                                tooltip: classes.bootstrapTooltip,
-                                popper: classes.bootstrapPopper,
-                                tooltipPlacementLeft: classes.bootstrapPlacementLeft,
-                            }}
-                            PopperProps={{
-                                popperOptions: {
-                                    modifiers: {
-                                        arrow: {
-                                            enabled: Boolean(this.state.arrowRef),
-                                            element: this.state.arrowRef,
-                                        },
-                                    },
-                                },
-                            }}>
-                            <IconButton
-                                aria-owns={open ? 'menu-appbar' : undefined}
-                                aria-haspopup="true"
-                                color="inherit"
-                                onClick={this.handleLeaveApp}>
-                                <Avatar className={classes.avatar}>
-                                    <ExitToApp/>
-                                </Avatar>
-                            </IconButton>
-                        </Tooltip>
+                        <IconButton
+                            aria-owns={open ? 'menu-appbar' : undefined}
+                            aria-haspopup="true"
+                            color="inherit"
+                            onClick={this.handleLeaveApp}>
+                            <Avatar className={classes.avatar}>
+                                <ExitToApp/>
+                            </Avatar>
+                        </IconButton>
                     </div>
                 </Toolbar>
             </AppBar>
@@ -197,4 +125,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default withStyles(styles)(connect(mapStateToProps)(AppBarMUI))
+export default withTheme()(withStyles(styles)(connect(mapStateToProps)(AppBarMUI)))

@@ -9,6 +9,7 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import withTheme from '@material-ui/core/styles/withTheme'
 
 import {receiveContract} from '../../modules/actions/contract'
 import {hideModalUpdateContract} from '../../modules/actions/contractModal'
@@ -84,4 +85,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(UpdateContractModal)
+export default withTheme()(connect(mapStateToProps)(UpdateContractModal))

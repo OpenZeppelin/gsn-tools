@@ -4,7 +4,7 @@ import * as PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import * as immutable from 'immutable'
 
-import {withStyles} from '@material-ui/core/styles'
+import {withTheme, withStyles} from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 
 import UpdateContractModal from '../dashboard/UpdateContractModal'
@@ -63,4 +63,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default withStyles(styles)(connect(mapStateToProps)(Layout))
+export default  withTheme()(withStyles(styles)(connect(mapStateToProps)(Layout)))
