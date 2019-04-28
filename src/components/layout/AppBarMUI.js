@@ -135,7 +135,7 @@ class AppBarMUI extends React.Component {
                         color="inherit"
                         noWrap
                         className={classes.title}>
-                        GSN Dapp Management Tool By Zeppelin
+                        GSN DApp Management Tool By Zeppelin
                     </Typography>
                     <div>
                         <Tooltip

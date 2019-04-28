@@ -59,10 +59,10 @@ class UpdateContractModal extends React.Component {
                             onChange={this.handleChange}/>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.handleClose} disabled={!address} color="primary">
+                        <Button onClick={this.handleClose} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={this.handleUpdate} color="primary">
+                        <Button onClick={this.handleUpdate} disabled={!address} color="primary">
                             Update
                         </Button>
                     </DialogActions>
