@@ -5,14 +5,11 @@ import classNames from 'classnames'
 import {withStyles, withTheme} from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
-import Divider from '@material-ui/core/Divider'
-import IconButton from '@material-ui/core/IconButton'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 
 import DrawerItems from './DrawerItems'
+import AppBarSpacer from './AppBarSpacer'
 
 const styles = theme => ({
-    toolbar: theme.mixins.toolbar,
     drawerPaper: {
         position: 'relative',
         whiteSpace: 'nowrap',
@@ -33,6 +30,7 @@ const styles = theme => ({
             width: theme.spacing.unit * 7,
         },
     },
+    appBarSpacer: theme.mixins.toolbar,
 })
 
 class DrawerMUI extends React.Component {
@@ -52,20 +50,15 @@ class DrawerMUI extends React.Component {
 
     render() {
         const pathname = window.location.pathname
-        const {classes, handleDrawerClose, open} = this.props
+        const {classes, open} = this.props
         return (
             <Drawer
                 open={open}
                 variant="permanent"
                 onMouseEnter={this.handleEnter} onMouseLeave={this.handleLeave}
                 classes={{paper: classNames(classes.drawerPaper, !open && classes.drawerPaperClose)}}>
-                <div className={classes.toolbar}>
-                    <IconButton onClick={handleDrawerClose}>
-                        <ChevronLeftIcon/>
-                    </IconButton>
-                </div>
-                <Divider/>
-                <List>
+                <AppBarSpacer/>
+                <List className={classes.pushDown}>
                     <DrawerItems pathname={pathname}/>
                 </List>
             </Drawer>

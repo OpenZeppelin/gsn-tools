@@ -11,9 +11,9 @@ import UpdateContractModal from '../dashboard/UpdateContractModal'
 import Landing from '../Landing'
 import Content from './Content'
 import Menu from './Menu'
+import AppBarSpacer from './AppBarSpacer'
 
 const styles = theme => ({
-    appBarSpacer: theme.mixins.toolbar,
     root: {
         display: 'flex',
     },
@@ -36,7 +36,7 @@ class Layout extends React.Component {
                     <CssBaseline/>
                     <Menu/>
                     <main className={classes.content}>
-                        <div className={classes.appBarSpacer}/>
+                        <AppBarSpacer/>
                         <Content/>
                         <UpdateContractModal/>
                     </main>
