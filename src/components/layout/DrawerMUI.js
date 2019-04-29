@@ -64,6 +64,7 @@ class DrawerMUI extends React.Component {
             <Drawer
                 open={open}
                 variant="permanent"
+                onMouseEnter={this.handleEnter} onMouseLeave={this.handleLeave}
                 classes={{paper: classNames(classes.drawerPaper, !open && classes.drawerPaperClose)}}>
                 <div className={classes.toolbarIcon}>
                     <IconButton onClick={handleDrawerClose}>
@@ -71,7 +72,7 @@ class DrawerMUI extends React.Component {
                     </IconButton>
                 </div>
                 <Divider/>
-                <List onMouseEnter={this.handleEnter} onMouseLeave={this.handleLeave}>
+                <List>
                     <DrawerItems pathname={pathname}/>
                 </List>
             </Drawer>

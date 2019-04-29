@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react'
-import PropTypes from 'prop-types'
+import * as PropTypes from 'prop-types'
 import moment from 'moment'
 import Web3 from 'web3'
 import ReactTimeAgo from 'react-time-ago/modules/ReactTimeAgo'
@@ -12,20 +12,19 @@ import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import TablePagination from '@material-ui/core/TablePagination'
 import Collapse from '@material-ui/core/Collapse'
-import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
 import TransactionsTableHead from './TransactionsTableHead'
 import {getTransactions} from '../../apis/etherscan'
 import {getSorting, stableSort} from '../../utils/sorting'
 import TransactionsTableCollapse from './TransactionsTableCollapse'
+import NoRecordsFound from "../layout/NoRecordsFound";
 
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
 
 const styles = theme => ({
     root: {
         width: '100%',
-        marginTop: theme.spacing.unit * 3,
     },
     table: {},
     tableWrapper: {
@@ -46,13 +45,15 @@ const styles = theme => ({
     },
     noData: {
         ...theme.mixins.gutters(),
-        marginTop: theme.spacing.unit * 2,
         paddingTop: theme.spacing.unit * 2,
         paddingBottom: theme.spacing.unit * 2,
         backgroundColor: theme.palette.action.disabledBackground,
     },
     paper: {
-        padding: theme.spacing.unit * 2,
+        paddingLeft: theme.spacing.unit * 3,
+        paddingRight: theme.spacing.unit * 3,
+        paddingTop: theme.spacing.unit * 2,
+        paddingBottom: theme.spacing.unit * 2,
         backgroundColor: '#fafafa',
     },
 })
@@ -121,11 +122,9 @@ class TransactionsTable extends React.Component {
 
         if (txs.size === 0) {
             return (
-                <Paper className={classes.noData} elevation={1}>
-                    <Typography variant="h6" component="h4">
-                        No transactions were found for this account.
-                    </Typography>
-                </Paper>
+                <NoRecordsFound>
+                    No transactions were found for this contract address.
+                </NoRecordsFound>
             )
         }
 
@@ -162,10 +161,8 @@ class TransactionsTable extends React.Component {
                                                 in={expanded === index}
                                                 component={(props) => (
                                                     <TableRow>
-                                                        <TableCell colSpan={4}>
-                                                            <Paper className={classes.paper}>
-                                                                {props.children}
-                                                            </Paper>
+                                                        <TableCell colSpan={4} className={classes.paper}>
+                                                            {props.children}
                                                         </TableCell>
                                                     </TableRow>
                                                 )}>

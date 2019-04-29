@@ -11,11 +11,11 @@ import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import TableHead from '@material-ui/core/TableHead'
-import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
 import {getTransactions} from '../../apis/etherscan'
 import {getSorting, stableSort} from '../../utils/sorting'
+import NoRecordsFound from '../layout/NoRecordsFound'
 
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
 
@@ -44,11 +44,6 @@ const styles = theme => ({
         paddingTop: theme.spacing.unit * 2,
         paddingBottom: theme.spacing.unit * 2,
         backgroundColor: theme.palette.action.disabledBackground,
-    },
-    paper: {
-        padding: theme.spacing.unit * 2,
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
     },
 })
 
@@ -102,11 +97,9 @@ class LastTransactionsTable extends React.Component {
 
         if (txs.size === 0) {
             return (
-                <Paper className={classes.noData} elevation={1}>
-                    <Typography variant="h6" component="h4">
-                        No transactions were found for this account.
-                    </Typography>
-                </Paper>
+                <NoRecordsFound>
+                    No transactions were found for this contract address.
+                </NoRecordsFound>
             )
         }
 
