@@ -2,7 +2,7 @@ import React from 'react'
 import * as PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import {withStyles} from '@material-ui/core/styles'
+import {withStyles, withTheme} from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
 import Divider from '@material-ui/core/Divider'
@@ -12,17 +12,11 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import DrawerItems from './DrawerItems'
 
 const styles = theme => ({
-    toolbarIcon: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: '0 8px',
-        ...theme.mixins.toolbar,
-    },
+    toolbar: theme.mixins.toolbar,
     drawerPaper: {
         position: 'relative',
         whiteSpace: 'nowrap',
-        width: 240,
+        width: theme.spacing.unit * 24,
         transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
@@ -36,11 +30,10 @@ const styles = theme => ({
         }),
         width: theme.spacing.unit * 7,
         [theme.breakpoints.up('sm')]: {
-            width: theme.spacing.unit * 9,
+            width: theme.spacing.unit * 7,
         },
     },
 })
-
 
 class DrawerMUI extends React.Component {
     handleEnter = () => {
@@ -66,7 +59,7 @@ class DrawerMUI extends React.Component {
                 variant="permanent"
                 onMouseEnter={this.handleEnter} onMouseLeave={this.handleLeave}
                 classes={{paper: classNames(classes.drawerPaper, !open && classes.drawerPaperClose)}}>
-                <div className={classes.toolbarIcon}>
+                <div className={classes.toolbar}>
                     <IconButton onClick={handleDrawerClose}>
                         <ChevronLeftIcon/>
                     </IconButton>
@@ -87,4 +80,4 @@ DrawerMUI.propTypes = {
     open: PropTypes.bool,
 }
 
-export default withStyles(styles)(DrawerMUI)
+export default withTheme()(withStyles(styles)(DrawerMUI))

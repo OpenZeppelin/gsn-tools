@@ -26,21 +26,6 @@ const styles = theme => ({
             duration: theme.transitions.duration.leavingScreen,
         }),
     },
-    appBarShift: {
-        marginLeft: theme.drawerWidth,
-        width: `calc(100% - ${theme.drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    menuButton: {
-        marginLeft: 12,
-        marginRight: 36,
-    },
-    menuButtonHidden: {
-        display: 'none',
-    },
     title: {
         flexGrow: 1,
         fontWeight: 300,
@@ -50,10 +35,6 @@ const styles = theme => ({
 
 
 class AppBarMUI extends React.Component {
-    state = {
-        arrowRef: null,
-    }
-
     handleLeaveApp = () => {
         const {dispatch} = this.props
         dispatch(receiveContract(immutable.Map({
@@ -67,7 +48,7 @@ class AppBarMUI extends React.Component {
     }
 
     render() {
-        const {classes, isFetchingContract, handleDrawerOpen, open} = this.props
+        const {classes, isFetchingContract, open} = this.props
 
         if (isFetchingContract) {
             return null
@@ -76,15 +57,8 @@ class AppBarMUI extends React.Component {
         return (
             <AppBar
                 position="absolute"
-                className={classNames(classes.appBar, open && classes.appBarShift)}>
-                <Toolbar disableGutters={!open} className={classes.toolbar}>
-                    <IconButton
-                        color="inherit"
-                        aria-label="Open drawer"
-                        onClick={handleDrawerOpen}
-                        className={classNames(classes.menuButton, open && classes.menuButtonHidden)}>
-                        <MenuIcon/>
-                    </IconButton>
+                className={classNames(classes.appBar)}>
+                <Toolbar className={classes.toolbar}>
                     <Typography
                         component="h4"
                         variant="h6"
