@@ -1,6 +1,7 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import immutable from 'immutable'
+import * as PropTypes from 'prop-types'
+import * as immutable from 'immutable'
+
 import {withStyles} from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
@@ -18,6 +19,13 @@ const styles = theme => ({
     grid: {
         flexGrow: 1,
     },
+    hr: {
+        border: 0,
+        borderTop: '1px solid #e7eaf3',
+        marginTop: '.75rem',
+        marginBottom: '.75rem',
+        opacity: '.75',
+    }
 })
 
 
@@ -25,11 +33,11 @@ class TransactionsTableCollapse extends React.PureComponent {
     render = () => {
         const {classes, tx} = this.props
         return (
-            <Grid container spacing={24}>
-                <Grid item xs={12}>
+            <Grid container spacing={8}>
+                <Grid item xs={12} className={classes.noBottom}>
                     <Typography component="span">
-                        <Grid container spacing={16}>
-                            <Grid item>
+                        <Grid container>
+                            <Grid item xs={2}>
                                 <label>Block</label>
                             </Grid>
                             <Grid item>
@@ -43,11 +51,12 @@ class TransactionsTableCollapse extends React.PureComponent {
                             </Grid>
                         </Grid>
                     </Typography>
+                    <hr className={classes.hr}/>
                 </Grid>
                 <Grid item xs={12}>
                     <Typography component="span">
-                        <Grid container spacing={16}>
-                            <Grid item>
+                        <Grid container>
+                            <Grid item xs={2}>
                                 <label>From</label>
                             </Grid>
                             <Grid item>
@@ -60,12 +69,13 @@ class TransactionsTableCollapse extends React.PureComponent {
                                 </a>
                             </Grid>
                         </Grid>
+                        <hr className={classes.hr}/>
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
                     <Typography component="span">
-                        <Grid container spacing={16}>
-                            <Grid item>
+                        <Grid container>
+                            <Grid item xs={2}>
                                 <label>To</label>
                             </Grid>
                             <Grid item>
@@ -75,6 +85,25 @@ class TransactionsTableCollapse extends React.PureComponent {
                                     rel="noopener noreferrer"
                                     href={`https://etherscan.io/address/${tx.get('to')}`}>
                                     {tx.get('to')}
+                                </a>
+                            </Grid>
+                        </Grid>
+                        <hr className={classes.hr}/>
+                    </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography component="span">
+                        <Grid container>
+                            <Grid item xs={2}>
+                                <label>View more</label>
+                            </Grid>
+                            <Grid item>
+                                <a
+                                    className={classes.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    href={`https://etherscan.io/tx/${tx.get('blockHash')}`}>
+                                    {'Etherscan.io'}
                                 </a>
                             </Grid>
                         </Grid>

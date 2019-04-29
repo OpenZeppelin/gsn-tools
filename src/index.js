@@ -14,7 +14,7 @@ const reduxStore = configureStore(immutable.Map({
     contract: immutable.Map({
         isFetching: false,
         data: immutable.Map({
-            address: null
+            address: '0x7607e5a7576674cbc7d03a1465bdef84b457eb0b'
         })
     })
 }))

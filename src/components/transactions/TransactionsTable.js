@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import Web3 from 'web3'
 import ReactTimeAgo from 'react-time-ago/modules/ReactTimeAgo'
+
 import {withStyles} from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -52,8 +53,7 @@ const styles = theme => ({
     },
     paper: {
         padding: theme.spacing.unit * 2,
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
+        backgroundColor: '#fafafa',
     },
 })
 
@@ -146,13 +146,7 @@ class TransactionsTable extends React.Component {
                                             <TableRow hover={true} onClick={() => this.handleRowClick(index)}>
                                                 <TableCell>
                                                     <span className={classes.hash}>
-                                                        <a
-                                                            className={classes.link}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            href={`https://etherscan.io/tx/${tx.get('blockHash')}`}>
-                                                            {tx.get('blockHash')}
-                                                        </a>
+                                                        {tx.get('blockHash')}
                                                     </span>
                                                 </TableCell>
                                                 <TableCell>
@@ -169,7 +163,7 @@ class TransactionsTable extends React.Component {
                                                 component={(props) => (
                                                     <TableRow>
                                                         <TableCell colSpan={4}>
-                                                            <Paper elevation={1} className={classes.paper}>
+                                                            <Paper className={classes.paper}>
                                                                 {props.children}
                                                             </Paper>
                                                         </TableCell>
@@ -189,12 +183,8 @@ class TransactionsTable extends React.Component {
                     count={txs.size}
                     rowsPerPage={rowsPerPage}
                     page={page}
-                    backIconButtonProps={{
-                        'aria-label': 'Previous Page',
-                    }}
-                    nextIconButtonProps={{
-                        'aria-label': 'Next Page',
-                    }}
+                    backIconButtonProps={{'aria-label': 'Previous Page'}}
+                    nextIconButtonProps={{'aria-label': 'Next Page'}}
                     onChangePage={this.handleChangePage}/>
             </Paper>
         )
