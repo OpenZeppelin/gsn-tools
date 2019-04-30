@@ -61,7 +61,7 @@ class Dashboard extends React.Component {
         dispatch(showModalUpdateContract())
     }
 
-    render() {
+    render = () => {
         const {contract, isFetchingContract, classes, className} = this.props
 
         if (isFetchingContract) {
@@ -77,7 +77,7 @@ class Dashboard extends React.Component {
                                 <Typography component="span">
                                     <Grid container spacing={16} className={classes.strong}>
                                         <Grid item>
-                                            <label>Dapp Contract:</label>
+                                            <label>DApp Contract:</label>
                                         </Grid>
                                         <Grid item>
                                             {contract.get('address')}
