@@ -18,7 +18,7 @@ import TransactionsTableHead from './TransactionsTableHead'
 import {getTransactions} from '../../apis/etherscan'
 import {getSorting, stableSort} from '../../utils/sorting'
 import TransactionsTableCollapse from './TransactionsTableCollapse'
-import NoRecordsFound from "../layout/NoRecordsFound";
+import NoRecordsFound from '../layout/NoRecordsFound'
 
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
 

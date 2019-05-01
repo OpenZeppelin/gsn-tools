@@ -2,7 +2,7 @@ import React, {Fragment} from 'react'
 import * as immutable from 'immutable'
 import {connect} from 'react-redux'
 import * as PropTypes from 'prop-types'
-import {withStyles,withTheme} from '@material-ui/core/styles'
+import {withStyles, withTheme} from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
 import TransactionsTable from './TransactionsTable'

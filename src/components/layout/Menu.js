@@ -26,9 +26,9 @@ class Layout extends React.Component {
                     open={openDrawer}
                     handleDrawerOpen={this.handleDrawerOpen}/>
                 <DrawerMUI
-                    open = {openDrawer}
+                    open={openDrawer}
                     handleDrawerOpen={this.handleDrawerOpen}
-                    handleDrawerClose = {this.handleDrawerClose}/>
+                    handleDrawerClose={this.handleDrawerClose}/>
             </React.Fragment>
         )
     }

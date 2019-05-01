@@ -7,7 +7,8 @@ export default (state = null, action) => {
         case ContractActions.REQUEST_CONTRACT:
             state = immutable.Map({
                 isFetching: true,
-                data: immutable.Map()})
+                data: immutable.Map()
+            })
             break
         case ContractActions.RECEIVE_CONTRACT:
             state = immutable.Map({
