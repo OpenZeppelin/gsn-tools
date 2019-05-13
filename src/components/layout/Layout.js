@@ -1,20 +1,19 @@
 import React from 'react'
-import {Route, Switch} from 'react-router'
-import PropTypes from 'prop-types'
-import {withStyles} from '@material-ui/core/styles'
+import {Route} from 'react-router'
+import * as PropTypes from 'prop-types'
+import {connect} from 'react-redux'
+import * as immutable from 'immutable'
+
+import {withStyles, withTheme} from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 
-import DrawerMUI from './DrawerMUI'
-import AppBarMUI from './AppBarMUI'
-import {routes} from '../../utils/routes'
-import Blank from '../Blank'
-import Clients from '../clients/Clients'
-import Transactions from '../transactions/Transactions'
-import Dashboard from '../dashboard/Dashboard'
-import UpdateDAppContractModal from '../dashboard/UpdateDAppContractModal'
+import UpdateContractModal from '../dashboard/UpdateContractModal'
+import Landing from '../Landing'
+import Content from './Content'
+import Menu from './Menu'
+import AppBarSpacer from './AppBarSpacer'
 
 const styles = theme => ({
-    appBarSpacer: theme.mixins.toolbar,
     root: {
         display: 'flex',
     },
@@ -28,71 +27,40 @@ const styles = theme => ({
 
 
 class Layout extends React.Component {
-    state = {
-        open: false,
-        dAppContract: '0x46b03Afe43786147D78DABaA734864dE459DFb93',
-        openContractModal: false,
-    }
-
-    handleDrawerOpen = () => {
-        this.setState({open: true})
-    }
-
-    handleDrawerClose = () => {
-        this.setState({open: false})
-    }
-
-    updateModalContract = () => {
-        this.setState((prevState) => ({
-            openContractModal: !prevState.openContractModal
-        }))
-    }
-
-    updateDAppContract = (contract) => {
-        this.setState({dAppContract: contract}, () => {
-            this.updateModalContract()
-        })
-    }
-
     render() {
-        const {classes} = this.props
-        const {open, dAppContract, openContractModal} = this.state
+        const {classes, contract} = this.props
+
+        if (contract.get('address')) {
+            return (
+                <div className={classes.root}>
+                    <CssBaseline/>
+                    <Menu/>
+                    <main className={classes.content}>
+                        <AppBarSpacer/>
+                        <Content/>
+                        <UpdateContractModal/>
+                    </main>
+                </div>
+            )
+        }
 
         return (
-            <div className={classes.root}>
-                <CssBaseline/>
-                <AppBarMUI
-                    open={open}
-                    dAppContract={dAppContract}
-                    openModalContractUpdate={this.updateModalContract}
-                    handleDrawerOpen={this.handleDrawerOpen}/>
-                <DrawerMUI open={open} handleDrawerClose={this.handleDrawerClose}/>
-                <main className={classes.content}>
-                    <div className={classes.appBarSpacer}/>
-                    <Switch>
-                        <Route exact path={routes.dashboard} render={() =>
-                            <Dashboard
-                                dAppContract={dAppContract}
-                                openModalContractUpdate={this.updateModalContract}/>
-                        }/>
-                        <Route exact path={routes.clients} component={Clients}/>
-                        <Route exact path={routes.transactions} render={() =>
-                            <Transactions dAppContract={dAppContract}/>
-                        }/>
-                        <Route component={Blank}/>
-                    </Switch>
-                    <UpdateDAppContractModal
-                        openModalContractUpdate={this.updateModalContract}
-                        updateDAppContract={this.updateDAppContract}
-                        shouldOpen={openContractModal}/>
-                </main>
-            </div>
+            <Route component={Landing}/>
         )
     }
 }
 
 Layout.propTypes = {
     classes: PropTypes.object.isRequired,
+    contract: PropTypes.instanceOf(immutable.Map).isRequired,
+    dispatch: PropTypes.func.isRequired,
 }
 
-export default withStyles(styles)(Layout)
+const mapStateToProps = (state) => {
+    const contract = state.get('contract') || immutable.Map({isFetching: true, data: immutable.Map()})
+    return {
+        contract: contract.get('data'),
+    }
+}
+
+export default withTheme()(withStyles(styles)(connect(mapStateToProps)(Layout)))

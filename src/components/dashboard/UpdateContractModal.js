@@ -1,40 +1,50 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import * as PropTypes from 'prop-types'
+import * as immutable from 'immutable'
+import {connect} from 'react-redux'
+
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import withTheme from '@material-ui/core/styles/withTheme'
+
+import {receiveContract} from '../../modules/actions/contract'
+import {hideModalUpdateContract} from '../../modules/actions/contractModal'
 
 
-class UpdateDAppContractModal extends React.Component {
+class UpdateContractModal extends React.Component {
     state = {
-        dAppContract: '',
+        address: '',
+        shouldOpen: false,
     }
 
     handleChange = (event) => {
-        this.setState({dAppContract: event.target.value})
+        this.setState({address: event.target.value})
     }
 
     handleUpdate = () => {
-        this.props.updateDAppContract(this.state.dAppContract)
+        const {dispatch} = this.props
+        dispatch(receiveContract(immutable.Map({address: this.state.address})))
+        dispatch(hideModalUpdateContract())
     }
 
     handleClose = () => {
-        this.props.openModalContractUpdate()
+        const {dispatch} = this.props
+        dispatch(hideModalUpdateContract())
     }
 
     render() {
-        const {shouldOpen} = this.props
-        const {dAppContract} = this.state
-
+        const {address} = this.state
+        const {show} = this.props
         return (
             <div>
                 <Dialog
                     fullWidth={true}
                     maxWidth={'sm'}
-                    open={shouldOpen}
+                    open={show}
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title">
                     <DialogTitle id="form-dialog-title">Update DApp Contract</DialogTitle>
@@ -46,14 +56,14 @@ class UpdateDAppContractModal extends React.Component {
                             label="DApp Contract"
                             type="hex"
                             fullWidth
-                            value={dAppContract}
+                            value={address}
                             onChange={this.handleChange}/>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClose} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={this.handleUpdate} color="primary">
+                        <Button onClick={this.handleUpdate} disabled={!address} color="primary">
                             Update
                         </Button>
                     </DialogActions>
@@ -63,10 +73,16 @@ class UpdateDAppContractModal extends React.Component {
     }
 }
 
-UpdateDAppContractModal.propTypes = {
-    openModalContractUpdate: PropTypes.func.isRequired,
-    updateDAppContract: PropTypes.func.isRequired,
-    shouldOpen: PropTypes.bool.isRequired,
+UpdateContractModal.propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    show: PropTypes.bool.isRequired,
 }
 
-export default UpdateDAppContractModal
+const mapStateToProps = (state) => {
+    const contractModal = state.get('contractModal') || immutable.Map({show: false})
+    return {
+        show: contractModal.get('show'),
+    }
+}
+
+export default withTheme()(connect(mapStateToProps)(UpdateContractModal))

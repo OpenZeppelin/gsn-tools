@@ -1,8 +1,11 @@
 import React, {Fragment} from 'react'
-import PropTypes from 'prop-types'
+import * as PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
 import classNames from 'classnames'
-import {withStyles} from '@material-ui/core/styles'
+import {connect} from 'react-redux'
+import * as immutable from 'immutable'
+
+import {withStyles, withTheme} from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
@@ -11,6 +14,7 @@ import Grid from '@material-ui/core/Grid'
 import ClientsPerDay from '../clients/ClientsPerDay'
 import LastTransactionsTable from '../transactions/LastTransactionsTable'
 import {buildUrl, routes} from '../../utils/routes'
+import {showModalUpdateContract} from '../../modules/actions/contractModal'
 
 const styles = ({
     zero: {
@@ -22,8 +26,8 @@ const styles = ({
         }
     },
     strong: {
-        fontWeight: 550,
-        fontSize: 18,
+        fontWeight: 350,
+        fontSize: `${1.35}em`,
     },
     linkTitle: {
         paddingTop: 16,
@@ -49,36 +53,43 @@ const styles = ({
 
 class Dashboard extends React.Component {
     shouldComponentUpdate = (nextProps) => {
-        return this.props.dAppContract !== nextProps.dAppContract
+        return this.props.contract !== nextProps.contract
     }
 
-    render() {
-        const {dAppContract, openModalContractUpdate, classes, className, ...other} = this.props
+    handleShowModal = () => {
+        const {dispatch} = this.props
+        dispatch(showModalUpdateContract())
+    }
+
+    render = () => {
+        const {contract, isFetchingContract, classes, className} = this.props
+
+        if (isFetchingContract) {
+            return null
+        }
+
         return (
             <Fragment>
                 <Grid container>
-                    {
-                        dAppContract &&
-                        <Grid item xs={12} onClick={openModalContractUpdate} className={classes.link}>
-                            <Card className={classes.card}>
-                                <CardContent className={classNames(classes.zero, className)} {...other}>
-                                    <Typography component="span">
-                                        <Grid container spacing={16}>
-                                            <Grid item>
-                                                <label className={classes.strong}>Dapp Contract:</label>
-                                            </Grid>
-                                            <Grid item>
-                                                {dAppContract}
-                                            </Grid>
+                    <Grid item xs={12} className={classes.link} onClick={this.handleShowModal}>
+                        <Card className={classes.card}>
+                            <CardContent className={classNames(classes.zero, className)}>
+                                <Typography component="span">
+                                    <Grid container spacing={16} className={classes.strong}>
+                                        <Grid item>
+                                            <label>DApp Contract:</label>
                                         </Grid>
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    }
+                                        <Grid item>
+                                            {contract.get('address')}
+                                        </Grid>
+                                    </Grid>
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Grid>
                     <Grid item xs={12}>
                         <Typography
-                            variant="h5"
+                            variant="h6"
                             className={classNames(classes.linkTitle, classes.strong)}
                             component={props => <Link to={buildUrl(routes.clients)} {...props}/>}>
                             Clients per day
@@ -99,7 +110,7 @@ class Dashboard extends React.Component {
                             Last Transactions
                         </Typography>
                         <div className={classes.tableContainer}>
-                            <LastTransactionsTable dAppContract={dAppContract}/>
+                            <LastTransactionsTable address={contract.get('address')}/>
                         </div>
                     </Grid>
                 </Grid>
@@ -111,8 +122,17 @@ class Dashboard extends React.Component {
 Dashboard.propTypes = {
     classes: PropTypes.object.isRequired,
     className: PropTypes.string,
-    dAppContract: PropTypes.string,
-    openModalContractUpdate: PropTypes.func.isRequired,
+    contract: PropTypes.instanceOf(immutable.Map).isRequired,
+    isFetchingContract: PropTypes.bool.isRequired,
+    dispatch: PropTypes.func.isRequired,
 }
 
-export default withStyles(styles)(Dashboard)
+const mapStateToProps = (state) => {
+    const contract = state.get('contract') || immutable.Map({isFetching: true, data: immutable.Map()})
+    return {
+        contract: contract.get('data'),
+        isFetchingContract: contract.get('isFetching')
+    }
+}
+
+export default withTheme()(withStyles(styles)(connect(mapStateToProps)(Dashboard)))

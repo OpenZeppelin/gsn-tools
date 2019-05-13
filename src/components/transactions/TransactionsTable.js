@@ -1,8 +1,9 @@
 import React, {Fragment} from 'react'
-import PropTypes from 'prop-types'
+import * as PropTypes from 'prop-types'
 import moment from 'moment'
 import Web3 from 'web3'
 import ReactTimeAgo from 'react-time-ago/modules/ReactTimeAgo'
+
 import {withStyles} from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -11,20 +12,19 @@ import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import TablePagination from '@material-ui/core/TablePagination'
 import Collapse from '@material-ui/core/Collapse'
-import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
 import TransactionsTableHead from './TransactionsTableHead'
-import {getTransactions} from '../../apis/transactions'
+import {getTransactions} from '../../apis/etherscan'
 import {getSorting, stableSort} from '../../utils/sorting'
 import TransactionsTableCollapse from './TransactionsTableCollapse'
+import NoRecordsFound from '../layout/NoRecordsFound'
 
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
 
 const styles = theme => ({
     root: {
         width: '100%',
-        marginTop: theme.spacing.unit * 3,
     },
     table: {},
     tableWrapper: {
@@ -50,9 +50,11 @@ const styles = theme => ({
         backgroundColor: theme.palette.action.disabledBackground,
     },
     paper: {
-        padding: theme.spacing.unit * 2,
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
+        paddingLeft: theme.spacing.unit * 3,
+        paddingRight: theme.spacing.unit * 3,
+        paddingTop: theme.spacing.unit * 2,
+        paddingBottom: theme.spacing.unit * 2,
+        backgroundColor: '#fafafa',
     },
 })
 
@@ -68,16 +70,18 @@ class TransactionsTable extends React.Component {
     }
 
     componentDidMount = () => {
-        getTransactions(this.props.dAppContract).then(txs =>
+        getTransactions(this.props.address).then(txs =>
             this.setState({txs: txs})
         )
     }
 
     componentDidUpdate = (prevProps) => {
-        if (this.props.dAppContract !== prevProps.dAppContract) {
-            getTransactions(this.props.dAppContract).then(txs =>
-                this.setState({txs: txs})
-            )
+        if (this.props.address !== prevProps.address) {
+            this.setState({txs: null}, () => {
+                getTransactions(this.props.address).then(txs =>
+                    this.setState({txs: txs})
+                )
+            })
         }
     }
 
@@ -118,11 +122,9 @@ class TransactionsTable extends React.Component {
 
         if (txs.size === 0) {
             return (
-                <Paper className={classes.noData} elevation={1}>
-                    <Typography variant="h6" component="h4">
-                        No transactions were found for this account.
-                    </Typography>
-                </Paper>
+                <NoRecordsFound>
+                    No transactions were found for this contract address.
+                </NoRecordsFound>
             )
         }
 
@@ -143,13 +145,7 @@ class TransactionsTable extends React.Component {
                                             <TableRow hover={true} onClick={() => this.handleRowClick(index)}>
                                                 <TableCell>
                                                     <span className={classes.hash}>
-                                                        <a
-                                                            className={classes.link}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            href={`https://etherscan.io/tx/${tx.get('blockHash')}`}>
-                                                            {tx.get('blockHash')}
-                                                        </a>
+                                                        {tx.get('blockHash')}
                                                     </span>
                                                 </TableCell>
                                                 <TableCell>
@@ -165,10 +161,8 @@ class TransactionsTable extends React.Component {
                                                 in={expanded === index}
                                                 component={(props) => (
                                                     <TableRow>
-                                                        <TableCell colSpan={4}>
-                                                            <Paper elevation={1} className={classes.paper}>
-                                                                {props.children}
-                                                            </Paper>
+                                                        <TableCell colSpan={4} className={classes.paper}>
+                                                            {props.children}
                                                         </TableCell>
                                                     </TableRow>
                                                 )}>
@@ -186,12 +180,8 @@ class TransactionsTable extends React.Component {
                     count={txs.size}
                     rowsPerPage={rowsPerPage}
                     page={page}
-                    backIconButtonProps={{
-                        'aria-label': 'Previous Page',
-                    }}
-                    nextIconButtonProps={{
-                        'aria-label': 'Next Page',
-                    }}
+                    backIconButtonProps={{'aria-label': 'Previous Page'}}
+                    nextIconButtonProps={{'aria-label': 'Next Page'}}
                     onChangePage={this.handleChangePage}/>
             </Paper>
         )
@@ -200,7 +190,7 @@ class TransactionsTable extends React.Component {
 
 TransactionsTable.propTypes = {
     classes: PropTypes.object.isRequired,
-    dAppContract: PropTypes.string,
+    address: PropTypes.string,
 }
 
 export default withStyles(styles)(TransactionsTable)

@@ -1,4 +1,4 @@
-import immutable from 'immutable'
+import * as immutable from 'immutable'
 
 const location = 'api.etherscan.io'
 const apiKey = 'Y35EQ8MWSNY547KX9EAUGUBPA4SXK8C7CN'
@@ -34,6 +34,11 @@ const getTransactions = async (address) => {
         })
 }
 
+const getContractDetails = async () => {
+    return await immutable.Map({address: '0x46b03Afe43786147D78DABaA734864dE459DFb93'})
+}
+
 export {
     getTransactions,
+    getContractDetails,
 }
